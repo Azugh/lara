@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SliderRequest;
 use App\Models\Slider;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
@@ -13,7 +12,7 @@ class SliderController extends Controller
     public function index()
     {
         $content = ['sliders' => Slider::orderBy("created_at", "desc")->get()];
-        return view('admin.admin', $content);
+        return view('admin/admin', $content);
     }
 
     public function show($id)
@@ -30,14 +29,15 @@ class SliderController extends Controller
     }
 
 
-    public function store(SliderRequest $request)
+    public function store(SliderRequest $request): RedirectResponse
     {
+        dd($request);
         $request = $request->all();
         if ($request['image']) {
             $imagePath = $request['image']->store('images/slider-images', 'public');
             $request['image'] = $imagePath;
         }
-
+        $request['isActive'] = false;
         Slider::create($request);
 
         return redirect()->route('admin.index')

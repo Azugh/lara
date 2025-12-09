@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/admin', function () {
     return view('admin/admin');
-});
+})->name('admin');
 
 
 Route::resource('/admin', SliderController::class)->only([
