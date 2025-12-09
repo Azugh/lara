@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lara-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: lara-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel_network
+
+  db:
+    image: postgres:16-alpine
+    container_name: lara-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 9247
+      POSTGRES_DB: lara
+    volumes:
+      - './postgres-data:/var/lib/postgresql/data'
+    restart: on-failure
+    networks:
+      - laravel_network
+
+
+networks:
+  laravel_network:
+    driver: bridge
