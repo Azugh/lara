@@ -23,10 +23,11 @@ class SliderRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:25',
-            // 'content' => 'required|string|max:50',
-            'content' => ['required','string', 'max:50'],
+            'content' => 'required|string|max:50',
+            // 'content' => ['required','string', 'max:50'],
             'btn_text' => 'required|string|max:15',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'isActive' => 'boolean',
         ];
     }
 
@@ -46,7 +47,8 @@ class SliderRequest extends FormRequest
             'image.image' => 'Файл должен быть изображением',
             'image.mimes' => 'Допустимые форматы: PNG, JPG, JPEG',
             'image.max' => 'Максимальный размер файла: 2MB',
-            'image.dimensions' => 'Размер изображения должен быть от 100x100 до 1000x1000 пикселей'
+            'image.dimensions' => 'Размер изображения должен быть от 100x100 до 1000x1000 пикселей',
+            'isActive.boolean'=> 'True или False',
         ];
     }
 }

@@ -1,14 +1,6 @@
-@extends('admin.layout.index')
-@section('title', 'Админка')
+@extends('admin.layout.app')
+@section('title', 'Слайдеры')
 
-@section('loader')
-    @include('admin.layout.loader')
-@endsection
-
-@section('navbar')
-    @include('admin.layout.navbar')
-@endsection
-
-@section('main')
-    @include('admin.layout.app')
+@section('content')
+    @include('admin.layout.content')
 @endsection

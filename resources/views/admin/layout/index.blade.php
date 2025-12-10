@@ -34,11 +34,13 @@
 
     {{--
     <link href="../layouts/vertical-dark-menu/css/light/plugins.css" rel="stylesheet" type="text/css" /> --}}
-    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/light/plugins.css') }}">
+    {{--
+    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/light/plugins.css') }}"> --}}
 
     {{--
     <link href="../layouts/vertical-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" /> --}}
-    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/dark/plugins.css') }}">
+    {{--
+    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/dark/plugins.css') }}"> --}}
 
     <!-- END GLOBAL MANDATORY STYLES -->
 
@@ -75,6 +77,20 @@
     <link href="../src/plugins/css/dark/bootstrap-range-Slider/bootstrap-slider.css" rel="stylesheet" type="text/css">
     --}}
     <link rel="stylesheet" href="{{ asset('plugins/css/dark/bootstrap-range-Slider/bootstrap-slider.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/dark/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/light/main.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('plugins/css/dark/perfect-scrollbar/perfect-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/css/light/perfect-scrollbar/perfect-scrollbar.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('plugins/src/highlight/styles/monokai-sublime.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/dark/structure.css') }}">
+    <link rel="stylesheet" href="{{ asset('layouts/vertical-dark-menu/css/light/structure.css') }}">
+
+
+
     <!--  END CUSTOM STYLE FILE  -->
 
 </head>
