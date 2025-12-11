@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
-    <title>Hygge</title>
+    <title>@yield('title')</title>
     <!-- Bootstrap core CSS -->
 
     {{--
@@ -30,7 +30,8 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic'
         rel='stylesheet' type='text/css'>
 
-    <link href="style/type/icons.css" rel="stylesheet">
+    {{--
+    <link href="style/type/icons.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ asset('type/icons.css') }}">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -42,36 +43,33 @@
 </head>
 
 <body>
-    <div id="preloader">
-        <div id="status">
-            <div class="spinner"></div>
-        </div>
-    </div>
     <div class="body-wrapper">
 
         @include('layout.navbar')
 
-        @include('layout.carousel')
+
+        @yield('main')
         @include('layout.footer')
     </div>
 
     {{--
     <script src="style/js/jquery.min.js"></script> --}}
-    <script src="js/jquery.min.js"></script>
+    <script src={{asset('js/jquery.min.js')}}></script>
 
-    <script src="style/js/bootstrap.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    {{--
+    <script src={{asset('')}}></script> --}}
+    <script src={{asset('js/bootstrap.min.js')}}></script>
 
     {{--
     <script src="style/js/plugins.js"></script> --}}
-    <script src="js/plugins.js"></script>
+    <script src={{asset('js/plugins.js')}}></script>
 
     {{--
     <script src="style/js/jquery.themepunch.tools.min.js"></script> --}}
-    <script src="js/jquery.themepunch.tools.min.js"></script>
+    <script src={{asset('js/jquery.themepunch.tools.min.js')}}></script>
 
     {{--
     <script src="style/js/scripts.js"></script> --}}
-    <script src="js/scripts.js"></script>
+    <script src={{asset('js/scripts.js')}}></script>
 
 </body>

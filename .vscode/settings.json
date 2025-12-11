@@ -10,5 +10,6 @@
             "database": "lara",
             "username": "postgres"
         }
-    ]
+    ],
+    "commentTranslate.hover.enabled": true
 }

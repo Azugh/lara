@@ -125,24 +125,5 @@
     <!-- .container -->
     <a href="{{ route('admin') }}" class="btn btn-sm btn-secondary float-end">
         Назад к списку
-    </a>INSERT INTO sliders (
-    id,
-    image,
-    title,
-    content,
-    btn_text,
-    isActive,
-    created_at,
-    updated_at
-    )
-    VALUES (
-    'id:bigint',
-    'image:character varying',
-    'title:character varying',
-    'content:character varying',
-    'btn_text:character varying',
-    isActive:boolean,
-    'created_at:timestamp without time zone',
-    'updated_at:timestamp without time zone'
-    );
+    </a>
 </footer>

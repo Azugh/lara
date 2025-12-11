@@ -41,7 +41,7 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-
+                                        
                                         <div class="row">
                                             <div class="mb-4">
                                                 <label for="content" class="form-label">Контент</label>

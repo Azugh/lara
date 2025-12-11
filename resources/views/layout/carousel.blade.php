@@ -1,3 +1,8 @@
+<div id="preloader">
+    <div id="status">
+        <div class="spinner"></div>
+    </div>
+</div>
 <div class="tp-fullscreen-container revolution">
     <div class="tp-fullscreen">
         <ul>
