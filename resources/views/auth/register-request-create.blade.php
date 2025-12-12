@@ -47,10 +47,10 @@
                                     <label class="custom-select">
                                         <select name="department" name="department" for="department">
                                             <option value="">Выберите Департамент</option>
-                                            <option value="Sales">Продажи</option>
-                                            <option value="Marketing">Маркетинг</option>
-                                            <option value="Support">Поддержка пользователя</option>
-                                            <option value="Other">Другой</option>
+                                            <option value="Продажи">Продажи</option>
+                                            <option value="Маркетинг">Маркетинг</option>
+                                            <option value="Поддержка пользователя">Поддержка пользователя</option>
+                                            <option value="Другой">Другой</option>
                                         </select>
                                         <i class="icon-ok"></i><span></span>
                                     </label>
@@ -59,8 +59,9 @@
                             </div>
                         </div>
                         <textarea name="message" for="message" placeholder="Type your message here..."></textarea>
-                        <input type="submit" class="btn" value="Отправить" data-error="Fix errors"
-                            data-processing="Sending..." data-success="Thank you!">
+                        <button type="submit" class="btn btn-primary">Создать слайдер</button>
+
+
                     </form>
                 </div>
             </div>

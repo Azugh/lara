@@ -69,6 +69,7 @@ Route::resource('register-request', RegisterController::class)->only([
     'index',
     'create',
     'store',
+    'update',
     'show',
     'destroy',
 ]);

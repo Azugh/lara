@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('register_requests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('department');
             $table->string('tel');
-            $table->string('message');
+            $table->string('message')->nullable();
+            $table->boolean('isVerified')->nullable();
+            $table->timestamp('verified_at')->useCurrent();
             $table->timestamps();
+            // $table->enum()
         });
     }
 
