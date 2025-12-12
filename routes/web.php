@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SliderController;
 use App\Models\ItemCategory;
 use App\Models\Slider;
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 // })->name('welcome');
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+// Route::get('/login', function() {
+//     return view('auth.register-request-create');
+// })->name('login');
 
 Route::get('/carousel', function() {
     $sliders = Slider::latest('created_at')->where('isActive', true)->get();
@@ -58,5 +63,13 @@ Route::resource('item', ItemController::class)->only([
     'show',
     'destroy',
     'edit',
+]);
+
+Route::resource('register-request', RegisterController::class)->only([
+    'index',
+    'create',
+    'store',
+    'show',
+    'destroy',
 ]);
 

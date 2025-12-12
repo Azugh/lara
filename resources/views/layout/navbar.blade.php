@@ -80,7 +80,7 @@
                         <li><a href="services.html">Services 1</a></li>
                         <li><a href="services2.html">Services 2</a></li>
                         <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="contact.html">Contact 1</a></li>
                         <li><a href="contact2.html">Contact 2</a></li>
                     </ul>
                 </li>
@@ -97,6 +97,7 @@
                         <li><a href="icon-fontello.html">Fontello Icons</a></li>
                     </ul>
                 </li>
+                <li><a href="{{ route('register-request.create') }}">Регистрация</a></li>
             </ul>
             <!-- /.navbar-nav -->
         </div>
