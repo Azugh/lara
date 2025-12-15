@@ -6,18 +6,19 @@ use App\Http\Requests\RegisterRequestRequest;
 use App\Models\RegisterRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
     //
 
     public function index() {
-        $content = RegisterRequest::where('isVerified', null)->orderBy('id', 'asc')->get();
-        return view('admin.auth.register-request', ['registerRequests' => $content]);
+        $content = RegisterRequest::where('isVerified', false)->orderBy('id', 'asc')->get();
+        return view('admin.auth.register_request', ['registerRequests' => $content]);
     }
 
     public function create() {
-        return view('auth.register-request-create');
+        return view('auth.register_request-create');
     }
 
     public function store(RegisterRequestRequest $request) {
@@ -39,14 +40,29 @@ class RegisterController extends Controller
             ->with('success', 'Ваш запрос отправлен на рассмотрение!');
     }
 
-    public function update(RegisterRequestRequest $request, $id) {
-        dd($id);
-        $request = $request->all();
+    // Верификация пользователя
+    // isVerified - пользователь подтвержден админом
+    // verified_at кастомное время валидации полльзователя
+    public function update($id) {
+
+
         $rr = RegisterRequest::findOrFail($id);
-        dd($rr);
-        $request['isVerified'] = true;
-        $request['verified_at'] = Carbon::now();
-        $rr->update($request);
-        return redirect()->route('admin')->with('success', 'Запрос одобрен!');
+
+        $rr->isVerified = true;
+        $rr->verified_at = now();
+
+        $rr->update();
+
+
+        return redirect()->route('register_request.index')->with('success', 'Запрос одобрен!');
+    }
+
+        public function destroy($id)
+    {
+        $registerRequest = RegisterRequest::findOrFail($id);
+        $registerRequest->delete();
+
+        return redirect()->route('register_request.index')
+            ->with('success', 'Запрос успешно удален!');
     }
 }

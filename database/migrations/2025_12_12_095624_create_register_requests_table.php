@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('department');
             $table->string('tel');
             $table->string('message')->nullable();
-            $table->boolean('isVerified')->nullable();
-            $table->timestamp('verified_at')->useCurrent();
+            $table->boolean('isVerified')->nullable()->default(false);
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
             // $table->enum()
         });

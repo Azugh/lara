@@ -37,6 +37,16 @@ Route::get('/admin', function () {
 // Route::get('/admin/slider/slider-create', [SliderController::class,'create'])->name('slider.create');
 // Route::post('admin/slider', [SliderController::class,'store'])->name('slider.store');
 
+Route::resource('register_request', RegisterController::class)->only([
+    'index',
+    'create',
+    'store',
+    'update',
+    'show',
+    'destroy',
+]);
+
+
 Route::resource('/admin/slider', SliderController::class)->only([
     'index',
     'create',
@@ -65,12 +75,4 @@ Route::resource('item', ItemController::class)->only([
     'edit',
 ]);
 
-Route::resource('register-request', RegisterController::class)->only([
-    'index',
-    'create',
-    'store',
-    'update',
-    'show',
-    'destroy',
-]);
 

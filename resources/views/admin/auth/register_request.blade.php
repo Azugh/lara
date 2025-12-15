@@ -56,7 +56,7 @@
                                                                             <div class="row ">
 
                                                                                 <form
-                                                                                    action="{{ route('register-request.update', ['register_request' => $rr->id]) }}"
+                                                                                    action="{{ route('register_request.update', $rr->id) }}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
                                                                                     @method('PATCH')

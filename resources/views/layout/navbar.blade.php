@@ -97,7 +97,7 @@
                         <li><a href="icon-fontello.html">Fontello Icons</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('register-request.create') }}">Регистрация</a></li>
+                <li><a href="{{ route('register_request.create') }}">Регистрация</a></li>
             </ul>
             <!-- /.navbar-nav -->
         </div>

@@ -11,7 +11,7 @@
                 <div class="divide20"></div>
                 <div class="form-container">
                     {{-- TODO --}}
-                    <form action="{{ route('register-request.store') }}" method="POST">
+                    <form action="{{ route('register_request.store') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-sm-6">
