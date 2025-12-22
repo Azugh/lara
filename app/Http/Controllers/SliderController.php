@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SliderRequest;
-use App\Models\Slider;
 use App\Models\Sliders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,20 +15,20 @@ class SliderController extends Controller
     public function index()
     {
         $content = DB::table('sliders')->latest('created_at')->get();
-        return view('admin.layout.sliders', ['sliders' => $content]);
+        return view('/admin/admin', ['sliders' => $content]);
     }
 
     public function show($id)
     {
         // dd($slider);
-        $slider = Slider::find($id);
+        $slider = Sliders::find($id);
 
-        return view('admin.slider.slider-show', compact('slider'));
+        return view('admin/slider/slider-show', compact('slider'));
     }
 
     public function create()
     {
-        return view('admin.slider.slider-create');
+        return view('admin/slider/slider-create');
     }
 
     public function store(SliderRequest $request)
@@ -51,7 +50,7 @@ class SliderController extends Controller
         // Log::error("message", ["ldo"=> $validated]);
         // $isActive = $request['isActive'];
         // dd($isActive);
-        Slider::create($request);
+        Sliders::create($request);
 
         return redirect()->route('slider.index')
             ->with('success', 'Слайдер успешно создан!');
@@ -59,9 +58,9 @@ class SliderController extends Controller
 
     public function edit($id)
     {
-        $slider = Slider::find($id);
+        $slider = Sliders::find($id);
 
-        return view('admin.slider.slider-edit', compact('slider'));
+        return view('admin/slider/slider-edit', compact('slider'));
     }
 
     public function update(SliderRequest $request, $id)
@@ -69,7 +68,7 @@ class SliderController extends Controller
         // dd($request);
 
         //находим запись в бд
-        $slider = Slider::findOrFail($id);
+        $slider = Sliders::findOrFail($id);
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -90,7 +89,7 @@ class SliderController extends Controller
 
     public function destroy($id)
     {
-        $slider = Slider::findOrFail($id);
+        $slider = Sliders::findOrFail($id);
 
         if ($slider->image) {
             Storage::disk('public')->delete($slider->image);

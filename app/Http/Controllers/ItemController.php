@@ -40,8 +40,7 @@ class ItemController extends Controller
         // Item::create($request)->categories()->attach($request['category']);
 
         $item = Item::create($request);
-
-        if (isset($request['category'])){
+        if ($request['category']){
             $item->categories()->sync($request['category']);
         }
         return redirect()->route('home.index')

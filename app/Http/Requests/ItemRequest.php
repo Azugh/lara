@@ -24,8 +24,8 @@ class ItemRequest extends FormRequest
         return [
             'name' => 'required|string|max:25',
             // 'content' => ['required','string', 'max:50'],
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            // 'category' => 'nullable',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category' => 'nullable',
         ];
     }
 }
