@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequestRequest;
 use App\Models\RegisterRequest;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -45,14 +43,22 @@ class RegisterController extends Controller
     // verified_at кастомное время валидации полльзователя
     public function update($id) {
 
-
         $rr = RegisterRequest::findOrFail($id);
 
-        $rr->isVerified = true;
+        $rr->isVerified = false;
         $rr->verified_at = now();
 
         $rr->update();
 
+        $user = User::create([
+            'name' => $rr->name,
+            'email' => $rr->email,
+            'department' => $rr->department,
+            'tel' => $rr->tel,
+            'password' => '12345',
+        ]);
+
+//        $token = $user->createToken('Auth token', ['user:read'])->accessToken;
 
         return redirect()->route('register_request.index')->with('success', 'Запрос одобрен!');
     }

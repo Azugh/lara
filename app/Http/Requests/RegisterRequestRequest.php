@@ -20,12 +20,13 @@ class RegisterRequestRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:25',
-            'email' => 'required|string|max:50',
-            'tel' => 'required|string|max:11',
-            'message' => 'required|string|max:255',
-        ];
-    }
+{
+    return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:register_requests,email',
+        'tel' => 'required|string|regex:/[7-8][0-9]{9}/|size:11',
+        'department' => 'required|string',
+        'message' => 'nullable|string',
+    ];
+}
 }

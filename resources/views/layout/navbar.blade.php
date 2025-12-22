@@ -97,7 +97,24 @@
                         <li><a href="icon-fontello.html">Fontello Icons</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('register_request.create') }}">Регистрация</a></li>
+
+                <li> @if (Route::has('login'))
+                    <div class="top-right links">
+                        @auth
+                        <a href="{{ url('/home') }}">Домой</a>
+                        @else
+                        <a href="{{ route('signin') }}">Логин</a>
+
+                        @if (Route::has('register'))
+                        <a href="{{ route('register_request.create') }}">Регистрация</a>
+                        @endif
+                        @endauth
+                    </div>
+                    @endif
+                </li>
+
+{{--                <li><a href="{{ route('register_request.create') }}">Регистрация</a></li>--}}
+{{--                <li><a href="{{ route('signin') }}">Войти</a></li>--}}
             </ul>
             <!-- /.navbar-nav -->
         </div>

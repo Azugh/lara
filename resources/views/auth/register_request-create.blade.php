@@ -27,8 +27,12 @@
                             <div class="col-sm-6">
                                 <div class="form-field">
                                     <label>
-                                        <input type="email" name="email" for="email" placeholder="Ваш e-mail">
+                                        <input type="email" name="email" for="email" placeholder="Ваш e-mail"
+                                            class="@error('email') is-invalid @enderror">
                                         <i class="icon-mail-alt"></i></label>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 {{-- /.form-field --}}
                             </div>
@@ -36,8 +40,13 @@
                             <div class="col-sm-6">
                                 <div class="form-field">
                                     <label>
-                                        <input type="tel" name="tel" for="tel" placeholder="Телефон">
-                                        <i class="icon-phone"></i></label>
+                                        <input type="tel" name="tel" for="tel" placeholder="Телефон: 8-xxx-xxx-xx-xx"
+                                            class="@error('tel') is-invalid @enderror">
+                                        <i class="icon-phone"></i>
+                                        @error('tel')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </label>
                                 </div>
                                 <!--/.form-field -->
                             </div>

@@ -22,6 +22,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 //     return view('auth.register-request-create');
 // })->name('login');
 
+Route::post('/tokens/create', function (Request $request) {
+
+    $token = $request->user()->createToken($request->token_name);
+
+    return ['token' => $token->plainTextToken];
+});
+
 Route::get('/carousel', function() {
     $sliders = Slider::latest('created_at')->where('isActive', true)->get();
     // dd($sliders[0]);
@@ -32,6 +39,10 @@ Route::get('/admin', function () {
     $sliders = DB::table('sliders')->latest('created_at')->get();
     return view('admin/admin', ['sliders' => $sliders]);
 })->name('admin');
+
+Route::get('/sign-in', function () {
+    return view('auth.login');
+})->name('signin');
 
 // Route::get('/admin/slider', [SliderController::class,'index'])->name('slider.index');
 // Route::get('/admin/slider/slider-create', [SliderController::class,'create'])->name('slider.create');
