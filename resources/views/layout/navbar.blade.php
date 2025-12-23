@@ -1,13 +1,15 @@
 <nav class="navbar navbar-default default">
     <div class="container">
         <div class="navbar-header">
-            <div class="basic-wrapper"> <a class="btn responsive-menu" data-toggle="collapse"
-                    data-target=".navbar-collapse"><i></i></a>
-                <div class="navbar-brand"> <a href="index.html"><img src="#"
-                            srcset="style/images/logo.png 1x, style/images/logo@2x.png 2x" class="logo-light"
-                            alt="" /><img src="#"
-                            srcset="style/images/logo-dark.png 1x, style/images/logo-dark@2x.png 2x" class="logo-dark"
-                            alt="" /></a>
+            <div class="basic-wrapper"><a class="btn responsive-menu" data-toggle="collapse"
+                                          data-target=".navbar-collapse"><i></i></a>
+                <div class="navbar-brand"><a href="index.html"><img src="#"
+                                                                    srcset="style/images/logo.png 1x, style/images/logo@2x.png 2x"
+                                                                    class="logo-light"
+                                                                    alt=""/><img src="#"
+                                                                                 srcset="style/images/logo-dark.png 1x, style/images/logo-dark@2x.png 2x"
+                                                                                 class="logo-dark"
+                                                                                 alt=""/></a>
                 </div>
                 <!-- /.navbar-brand -->
             </div>
@@ -30,7 +32,7 @@
                     </ul>
                 </li>
                 <li class="current dropdown"><a href="#" class="dropdown-toggle js-activated"
-                        data-toggle="dropdown">Sliders <span class="caret"></span></a>
+                                                data-toggle="dropdown">Sliders <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="slider.html">Fullscreen Slider</a></li>
                         <li><a href="slider2.html">Fullwidth Slider</a></li>
@@ -97,24 +99,20 @@
                         <li><a href="icon-fontello.html">Fontello Icons</a></li>
                     </ul>
                 </li>
+                @guest
+                    <li><a href="{{ route('register') }}">Регистрация</a></li>
+                    <li><a href="{{ route('login') }}">Войти</a></li>
+                @endguest
+                    <li><a href="{{ route('dashboard') }}">Профиль</a></li>
+                    <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a>
 
-                <li> @if (Route::has('login'))
-                    <div class="top-right links">
-                        @auth
-                        <a href="{{ url('/home') }}">Домой</a>
-                        @else
-                        <a href="{{ route('signin') }}">Логин</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    </li>
+                @auth
 
-                        @if (Route::has('register'))
-                        <a href="{{ route('register_request.create') }}">Регистрация</a>
-                        @endif
-                        @endauth
-                    </div>
-                    @endif
-                </li>
-
-{{--                <li><a href="{{ route('register_request.create') }}">Регистрация</a></li>--}}
-{{--                <li><a href="{{ route('signin') }}">Войти</a></li>--}}
+                @endauth
             </ul>
             <!-- /.navbar-nav -->
         </div>

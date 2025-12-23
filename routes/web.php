@@ -1,64 +1,39 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ItemCategoryController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SliderController;
-use App\Models\ItemCategory;
-use App\Models\Slider;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function ()  {
-//     $sliders = Slider::where('isActive', true)->latest('created_at')->get();
-//     $categories = ItemCategory::latest('created_at')->get();
-//     return view('welcome', ['sliders' => $sliders, 'categories' => $categories]);
-// })->name('welcome');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('/login', function() {
-//     return view('auth.register-request-create');
-// })->name('login');
-
-Route::post('/tokens/create', function (Request $request) {
-
-    $token = $request->user()->createToken($request->token_name);
-
-    return ['token' => $token->plainTextToken];
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/carousel', function() {
-    $sliders = Slider::latest('created_at')->where('isActive', true)->get();
+require __DIR__ . '/auth.php';
+
+Route::get('/carousel', function () {
+    $sliders = \App\Models\Slider::latest('created_at')->where('isActive', true)->get();
     // dd($sliders[0]);
     return view('layout.carousel', ['sliders' => $sliders]);
 });
+
 
 Route::get('/admin', function () {
     $sliders = DB::table('sliders')->latest('created_at')->get();
     return view('admin/admin', ['sliders' => $sliders]);
 })->name('admin');
 
-Route::get('/sign-in', function () {
-    return view('auth.login');
-})->name('signin');
-
 // Route::get('/admin/slider', [SliderController::class,'index'])->name('slider.index');
 // Route::get('/admin/slider/slider-create', [SliderController::class,'create'])->name('slider.create');
 // Route::post('admin/slider', [SliderController::class,'store'])->name('slider.store');
 
-Route::resource('register_request', RegisterController::class)->only([
-    'index',
-    'create',
-    'store',
-    'update',
-    'show',
-    'destroy',
-]);
-
-
-Route::resource('/admin/slider', SliderController::class)->only([
+Route::resource('/admin/slider', \App\Http\Controllers\SliderController::class)->only([
     'index',
     'create',
     'store',
@@ -68,7 +43,13 @@ Route::resource('/admin/slider', SliderController::class)->only([
     'edit',
 ]);
 
-Route::resource('item-category', ItemCategoryController::class)->only([
+Route::resource('/admin/user', \App\Http\Controllers\UserController::class)->only([
+    'index',
+]);
+
+Route::post('/admin/user/{id}', [\App\Http\Controllers\UserController::class, 'verifyEmail'])->name('verifyEmail');
+
+Route::resource('item-category', \App\Http\Controllers\ItemCategoryController::class)->only([
     'index',
     'create',
     'store',
@@ -77,7 +58,7 @@ Route::resource('item-category', ItemCategoryController::class)->only([
     'edit',
 ]);
 
-Route::resource('item', ItemController::class)->only([
+Route::resource('item', \App\Http\Controllers\ItemController::class)->only([
     'index',
     'create',
     'store',
@@ -85,5 +66,3 @@ Route::resource('item', ItemController::class)->only([
     'destroy',
     'edit',
 ]);
-
-

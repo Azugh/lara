@@ -50,7 +50,7 @@
                         <a href="{{ route('slider.index') }}"> Слайдеры </a>
                     </li>
                     <li>
-                        <a href="{{ route('register_request.index') }}"> Запросы на регистрацию </a>
+                        <a href="{{ route('user.index') }}"> Запросы на регистрацию </a>
                     </li>
                 </ul>
             </li>

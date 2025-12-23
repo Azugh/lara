@@ -15,8 +15,10 @@ class HomeController extends Controller
         if ($request != null) {
             dd($request);
         }
+        
         $sliders = Slider::where('isActive', true)->latest('created_at')->get();
-        $categories = ItemCategory::latest('created_at')->get();
+        $categories = ItemCategory::with('items')->latest('created_at')->get();
+        // dd($categories);
         return view('welcome', ['sliders' => $sliders, 'categories' => $categories]);
     }
 

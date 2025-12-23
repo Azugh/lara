@@ -1,4 +1,4 @@
-@extends('admin.layout.app')
+@extends('admin.layout.app')app.css
 @section('title', 'Админка')
 
 @section('content')
