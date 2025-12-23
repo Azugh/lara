@@ -26,22 +26,16 @@
                                                                     style="width: 300.300px">ID
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Изображение
+                                                                    style="width: 300.300px">Имя
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Заголовок
+                                                                    style="width: 300.300px">email
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Текст слайдера
+                                                                    style="width: 300.300px">Пользователь подтвержден
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Текст кнопки
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 100.100px">Слайдер активен?
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Действия
+                                                                    style="width: 300.300px">Дейсивия
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -52,7 +46,8 @@
 
                                                                     <td>{{ $user->name }}</td>
                                                                     <td>{{ $user->email }}</td>
-                                                                    {{--                                                                    <td>{{ $user->department }}</td>--}}
+                                                                    <td>{{ $user->department }}</td>
+                                                                    <td>{{ $user->tel }}</td>
                                                                     <td>
                                                                         @if($user->email_verified_at)
                                                                             Да
@@ -68,7 +63,10 @@
                                                                                     action="{{route('verifyEmail', $user->id)}}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
-                                                                                    <button type="submit" class="btn btn-warning">Подтвердить</button>
+                                                                                    <button type="submit"
+                                                                                            class="btn btn-success">
+                                                                                        Подтвердить
+                                                                                    </button>
                                                                                 </form>
                                                                                 <form
                                                                                     action="{{ route('slider.destroy', $user->id) }}"
@@ -76,7 +74,7 @@
                                                                                     @csrf
                                                                                     @method('DELETE')
                                                                                     <button type="submit"
-                                                                                            class="btn btn-primary"
+                                                                                            class="btn btn-secondary"
                                                                                             onclick="return confirm('Удалить?')">
                                                                                         Удалить
                                                                                     </button>

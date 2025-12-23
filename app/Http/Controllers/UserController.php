@@ -13,7 +13,6 @@ class UserController extends Controller
         return view('admin.user.users', ['users' => $content]);
     }
 
-
     // подтвердить email
     public function verifyEmail($id)
     {

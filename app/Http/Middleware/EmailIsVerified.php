@@ -15,6 +15,9 @@ class EmailIsVerified
      */
     public function handle(Request $request, Closure $next): Response
     {
+    if ($request->user()->hasVerifiedEmail()) {
+
+    }
         return $next($request);
     }
 }

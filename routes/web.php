@@ -66,3 +66,7 @@ Route::resource('item', \App\Http\Controllers\ItemController::class)->only([
     'destroy',
     'edit',
 ]);
+
+Route::get('sign-up', function() {
+    return view('auth.signup');
+})->name('sign-up');
