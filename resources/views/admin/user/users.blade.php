@@ -12,7 +12,12 @@
 
                             <div class="col-lg-12">
                                 <div class="statbox widget box box-shadow">
-                                    <h4 class="mb-4">Пользователи</h4>
+                                    @if(\Illuminate\Support\Facades\Auth::user())
+                                        {{\Illuminate\Support\Facades\Auth::user()->id}}
+                                    @else
+                                        не логин
+                                    @endif
+                                    <h4 class="mb-4">Пользователи </h4>
 
                                     <div class="row layout-top-spacing">
                                         <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">

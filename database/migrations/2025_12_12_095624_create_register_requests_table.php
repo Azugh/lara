@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('message')->nullable();
             $table->boolean('isVerified')->nullable();
 //            $table->timestamp('verified_at')->useCurrent();
-            $table->string('password');
+//            $table->string('password');
             $table->timestamps();
             // $table->enum()
         });

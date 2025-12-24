@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\RegisterRequest;
 use App\Models\User;
-use function PHPUnit\Framework\isNan;
 
 class UserController extends Controller
 {

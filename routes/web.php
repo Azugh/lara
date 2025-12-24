@@ -47,6 +47,8 @@ Route::resource('/admin/register_request', \App\Http\Controllers\RegisterControl
     'index',
 ]);
 
+Route::post('login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'loginByEmail'])->name('email.login');
+
 Route::post('/admin/register_request/{id}', [\App\Http\Controllers\RegisterController::class, 'verifyUser'])->name('verifyUser');
 
 Route::resource('item-category', \App\Http\Controllers\ItemCategoryController::class)->only([

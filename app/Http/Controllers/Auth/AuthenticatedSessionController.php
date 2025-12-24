@@ -36,6 +36,18 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * @param LoginRequest $request
+     *  login throuth email
+     * @return RedirectResponse
+     */
+    public function loginByEmail(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        $request->session()->regenerate();
+    }
+
+    /**
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse
