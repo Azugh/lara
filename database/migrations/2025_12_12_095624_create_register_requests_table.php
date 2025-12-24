@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('tel');
             $table->string('message')->nullable();
             $table->boolean('isVerified')->nullable();
-            $table->timestamp('verified_at')->useCurrent();
+//            $table->timestamp('verified_at')->useCurrent();
+            $table->string('password');
             $table->timestamps();
             // $table->enum()
         });

@@ -101,7 +101,7 @@
                 </li>
                 @guest
                     {{--                    <li><a href="{{ route('register') }}">Регистрация</a></li>--}}
-                    <li><a href="{{ route('sign-up') }}">Регистрация</a></li>
+                    <li><a href="{{ route('register_request.create') }}">Регистрация</a></li>
                     <li><a href="{{ route('login') }}">Войти</a></li>
                 @endguest
                 @auth

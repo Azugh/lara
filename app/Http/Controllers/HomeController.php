@@ -10,12 +10,9 @@ class HomeController extends Controller
 {
     //
 
-    public function index(Request $request = null)
+    public function index()
     {
-        if ($request != null) {
-            dd($request);
-        }
-        
+
         $sliders = Slider::where('isActive', true)->latest('created_at')->get();
         $categories = ItemCategory::with('items')->latest('created_at')->get();
         // dd($categories);

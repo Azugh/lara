@@ -43,11 +43,11 @@ Route::resource('/admin/slider', \App\Http\Controllers\SliderController::class)-
     'edit',
 ]);
 
-Route::resource('/admin/user', \App\Http\Controllers\UserController::class)->only([
+Route::resource('/admin/register_request', \App\Http\Controllers\RegisterController::class)->only([
     'index',
 ]);
 
-Route::post('/admin/user/{id}', [\App\Http\Controllers\UserController::class, 'verifyEmail'])->name('verifyEmail');
+Route::post('/admin/register_request/{id}', [\App\Http\Controllers\RegisterController::class, 'verifyUser'])->name('verifyUser');
 
 Route::resource('item-category', \App\Http\Controllers\ItemCategoryController::class)->only([
     'index',
@@ -67,6 +67,13 @@ Route::resource('item', \App\Http\Controllers\ItemController::class)->only([
     'edit',
 ]);
 
-Route::get('sign-up', function() {
-    return view('auth.signup');
-})->name('sign-up');
+//Route::get('sign-up', function() {
+//    return view('auth.signup');
+//})->name('sign-up');
+
+//Route::resource('register_request', \App\Http\Controllers\RegisterController::class)->only([
+//    'index',
+//    'create',
+//    'store',
+//    'destroy',
+//]);

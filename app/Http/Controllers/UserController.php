@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegisterRequest;
 use App\Models\User;
 use function PHPUnit\Framework\isNan;
 
@@ -9,7 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $content = User::latest()->where('email_verified_at', null)->get();
+        $content = RegisterRequest::latest()->where('isVerified', null)->get();
         return view('admin.user.users', ['users' => $content]);
     }
 

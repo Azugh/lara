@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property \Illuminate\Support\HigherOrderCollectionProxy|mixed $password
+ */
 class RegisterRequest extends Model
 {
     //
-    public $fillable = ['name', 'email', 'message', 'department', 'tel',];
+    public $fillable = ['name', 'email', 'message', 'department', 'tel', 'isVerified', 'password'];
 
-    protected $hidden = ['isVerified'];
+    protected $hidden = ['isVerified', 'password',];
 
     protected function casts(): array
     {

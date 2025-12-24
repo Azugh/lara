@@ -11,7 +11,7 @@
                 <div class="divide20"></div>
                 <div class="form-container">
                     {{-- TODO --}}
-                    <form action="{{ route('register') }}" method="POST">
+                    <form action="{{ route('register_request.store') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-sm-6">
@@ -56,7 +56,7 @@
                                 <div class="form-field">
                                     <label class="custom-select">
                                         <select name="department">
-                                            <option value="">Выберите Департамент</option>
+                                            <option disabled hidden>Выберите Департамент</option>
                                             <option value="Продажи">Продажи</option>
                                             <option value="Маркетинг">Маркетинг</option>
                                             <option value="Поддержка пользователя">Поддержка пользователя</option>
@@ -70,7 +70,7 @@
                             <div class="col-sm-6">
                                 <div class="form-field">
                                     <label>
-                                        <input type="password" name="password" placeholder="Пароль"
+                                        <input id="password" type="password" name="password" placeholder="Пароль"
                                                class="@error('password') is-invalid @enderror">
                                         <i class="icon-key"></i>
                                         @error('password')
@@ -82,11 +82,12 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-field">
-                                    <label>
-                                        <input type="password" name="password-confirmation" placeholder="Повторите пароль"
-                                               class="@error('password-confirmation') is-invalid @enderror">
+                                    <label for="password_confirmation">
+                                        <input id="password_confirmation" type="password" name="password_confirmation"
+                                               placeholder="Повторите пароль"
+                                               class="@error('password_confirmation') is-invalid @enderror">
                                         <i class="icon-key"></i>
-                                        @error('password-confirmation')
+                                        @error('password_confirmation')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </label>

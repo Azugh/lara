@@ -22,21 +22,14 @@
                                                         <table id="zero-config" class="table dt-table-hover">
                                                             <thead>
                                                             <tr>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">ID
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Имя
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">email
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Пользователь подтвержден
-                                                                </th>
-                                                                <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Дейсивия
-                                                                </th>
+                                                                <th>ID</th>
+                                                                <th>Имя</th>
+                                                                <th>email</th>
+                                                                <th>Отдел</th>
+                                                                <th>Телефон</th>
+                                                                <th>email подтвержден</th>
+                                                                <th>Сообщение</th>
+                                                                <th>Действия</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -48,6 +41,7 @@
                                                                     <td>{{ $user->email }}</td>
                                                                     <td>{{ $user->department }}</td>
                                                                     <td>{{ $user->tel }}</td>
+
                                                                     <td>
                                                                         @if($user->email_verified_at)
                                                                             Да
@@ -55,12 +49,14 @@
                                                                             Нет
                                                                         @endif
                                                                     </td>
+                                                                    <td>{{ $user->message }}</td>
+
                                                                     <td>
                                                                         <div class="list">
                                                                             <div class="row">
 
                                                                                 <form
-                                                                                    action="{{route('verifyEmail', $user->id)}}"
+                                                                                    action="{{route('verifyUser', $user->id)}}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
                                                                                     <button type="submit"
