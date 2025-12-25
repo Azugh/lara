@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class RegisterRequest extends Model
 {
     //
-    public $fillable = ['name', 'email', 'message', 'department', 'tel', 'isVerified', 'password'];
+    public $fillable = ['name', 'email', 'message', 'department', 'tel', 'isVerified', 'password', 'pending_verification'];
 
     protected $hidden = ['isVerified', 'password',];
 

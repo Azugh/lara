@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequestRequest;
-use App\Mail\VerifyEmail;
+use App\Mail\VerifyMail;
 use App\Models\RegisterRequest;
 use App\Models\User;
 use Exception;
@@ -17,7 +17,9 @@ class RegisterController extends Controller
     //
     public function index()
     {
-        $content = RegisterRequest::where('isVerified', null)->orderBy('id', 'asc')->get();
+        $content = RegisterRequest::where('isVerified', null)
+            ->where('pending_verification', false)
+            ->orderBy('id', 'asc')->get();
         return view('admin.user.users', ['users' => $content]);
     }
 
@@ -28,23 +30,13 @@ class RegisterController extends Controller
 
     public function store(RegisterRequestRequest $request)
     {
-//        dd($request);
-//        $request->validate([
-//            'name' => ['required', 'string', 'max:255'],
-//            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-//            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-//            'tel' => ['required', 'string', 'size:11'],
-//        ]);
-
-        $reg = new RegisterRequest();
-        $reg->name = $request['name'];
-        $reg->message = $request['message'];
-        $reg->tel = $request['tel'];
-//        $reg->password = $request['password'];
-        $reg->department = $request['department'];
-        $reg->email = $request['email'];
-
-        $reg->save();
+        RegisterRequest::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'tel' => $request->tel,
+            'message' => $request->message,
+            'department' => $request->department,
+        ]);
 
         return redirect()->route('home.index')
             ->with('success', 'Ваш запрос отправлен на рассмотрение!');
@@ -54,59 +46,68 @@ class RegisterController extends Controller
     public function verifyUser($id)
     {
         $req = RegisterRequest::findOrFail($id);
+
         Log::error('error', [$req]);
-        if (is_null($req['isVerified'])) {
-//            dd(is_null($req['isVerified']));
-//            $req['isVerified'] = true;
-//            $req->update();
 
-//            $user = User::create([
-//                'name' => $req->name,
-//                'email' => $req->email,
-//                'password' => Str::random(8),
-//                'tel' => $req->tel,
-//                'department' => $req->department,
-//            ]);
+        if (is_null($req['isVerified']) && !$req['pending_verification']) {
 
-//            $this->createUser($req);
-
-//            event(new Registered($user));
-            $userPassword = Str::random(8);
-            $this->sendEmailVerification($req, $userPassword);
+            $req['pending_verification'] = true;
+            $req->update();
+//            $userPassword = Str::random(8);
+            $this->createUser($req);
+            //{{
+//            $this->sendEmailVerification($req, $userPassword);
             return redirect()->route('register_request.index')->with('success', 'Email подтвержден.');
         }
         return redirect()->route('register_request.index')->with('error', 'ошибка');
     }
 
-    public function createUser(Request $request)
-    {
-//        $userPassword = Str::random(8);
-//        Log::error('Password', [$userPassword, $request->email]);
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->userPassword,
-            'tel' => $request->tel,
-            'department' => $request->department,
-        ]);
+//    public function sendEmailVerification($user, $userPassword)
+//    {
+//        try {
+//            Mail::to($user->email)->send(new VerifyMail($user, $userPassword));
+//            Log::info('success', [$user->email, $userPassword]);
+//
+//        } catch (Exception $e) {
+//            Log::error('error', [$e]);
+//            dd($e->getMessage());
+//        }
+//    }
 
-//        $this->sendEmailVerification($user, $userPassword);
-            $user->save();
-
-    }
-
-    public function sendEmailVerification($user, $userPassword)
+    /**
+     * verify and create user by email
+     */
+    public function verifyMail(Request $request)
     {
         try {
-            Mail::to($user->email)->send(new VerifyEmail($user, $userPassword));
-            Log::error('success', [$user->email, $userPassword]);
+//            $reg = RegisterRequest::findOrFail($request->id);
+//            $this->createUser($reg, $request->password);
+//            $reg['isVerified'] = true;
+//            $reg->update();
+            return redirect()->route('email-is-verified');
         } catch (Exception $e) {
-            Log::error('error', [$e]);
             dd($e->getMessage());
         }
 
     }
 
+    public function createUser(RegisterRequest $request)
+    {
+//        $userPassword = Str::random(8);
+//        Log::error('Password', [$userPassword, $request->email]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'tel' => $request->tel,
+            'department' => $request->department,
+            'email_verified_at' => now(),
+        ]);
+
+
+//        $this->sendEmailVerification($user, $userPassword);
+//        $user->save();
+    }
 
 //    public function update(RegisterRequestRequest $request, $id) {
 //        dd($id);

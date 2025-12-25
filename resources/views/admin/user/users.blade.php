@@ -33,6 +33,7 @@
                                                                 <th>Отдел</th>
                                                                 <th>Телефон</th>
                                                                 <th>email подтвержден</th>
+                                                                <th>В ожидании</th>
                                                                 <th>Сообщение</th>
                                                                 <th>Действия</th>
                                                             </tr>
@@ -49,6 +50,13 @@
 
                                                                     <td>
                                                                         @if($user->email_verified_at)
+                                                                            Да
+                                                                        @else
+                                                                            Нет
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>
+                                                                        @if($user->pending_verification)
                                                                             Да
                                                                         @else
                                                                             Нет

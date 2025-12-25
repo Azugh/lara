@@ -9,7 +9,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $content = RegisterRequest::latest()->where('isVerified', null)->get();
+        $content = RegisterRequest::latest()->where('isVerified', null)
+            ->where('pending_verification', false)->get();
         return view('admin.user.users', ['users' => $content]);
     }
 

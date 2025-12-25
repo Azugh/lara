@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => \Hash::make(env('ADMIN_PASSWORD')),
+            'tel' => '89116972434',
+            'department' => 'Админ',
         ]);
     }
 }

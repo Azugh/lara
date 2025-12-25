@@ -18,16 +18,33 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/carousel', function () {
-    $sliders = \App\Models\Slider::latest('created_at')->where('isActive', true)->get();
+    $sliders = \App\Models\Slider::latest('created_at')->where('isActive', true)
+        ->get();
     // dd($sliders[0]);
     return view('layout.carousel', ['sliders' => $sliders]);
 });
 
 
 Route::get('/admin', function () {
-    $sliders = DB::table('sliders')->latest('created_at')->get();
-    return view('admin/admin', ['sliders' => $sliders]);
+//    $sliders = DB::table('sliders')->latest('created_at')->get();
+    return view('admin/admin');
 })->name('admin');
+
+
+Route::resource('/admin/register_request', \App\Http\Controllers\RegisterController::class)->only([
+    'index',
+]);
+
+Route::post('login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'loginByEmail'])
+    ->name('email.login');
+
+Route::post('/admin/register_request/{id}', [\App\Http\Controllers\RegisterController::class, 'verifyUser'])
+    ->middleware('throttle:6,1')
+    ->name('verifyUser');
+
+Route::get('email-is-verified', function () {
+    return view('components.email-is-verified');
+})->name('email-is-verified');
 
 // Route::get('/admin/slider', [SliderController::class,'index'])->name('slider.index');
 // Route::get('/admin/slider/slider-create', [SliderController::class,'create'])->name('slider.create');
@@ -42,14 +59,6 @@ Route::resource('/admin/slider', \App\Http\Controllers\SliderController::class)-
     'destroy',
     'edit',
 ]);
-
-Route::resource('/admin/register_request', \App\Http\Controllers\RegisterController::class)->only([
-    'index',
-]);
-
-Route::post('login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'loginByEmail'])->name('email.login');
-
-Route::post('/admin/register_request/{id}', [\App\Http\Controllers\RegisterController::class, 'verifyUser'])->name('verifyUser');
 
 Route::resource('item-category', \App\Http\Controllers\ItemCategoryController::class)->only([
     'index',
@@ -68,6 +77,8 @@ Route::resource('item', \App\Http\Controllers\ItemController::class)->only([
     'destroy',
     'edit',
 ]);
+
+
 
 //Route::get('sign-up', function() {
 //    return view('auth.signup');

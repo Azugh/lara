@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * @param LoginRequest $request
-     *  login throuth email
+     *  login with email
      * @return RedirectResponse
      */
     public function loginByEmail(LoginRequest $request): RedirectResponse
@@ -45,6 +45,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
