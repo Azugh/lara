@@ -1,17 +1,15 @@
-@component(mail::mes)
+<x-guest-layout>
 <h1>
-    Здравствуйте {{$user->name}}
+    Здравствуйте {{$registerRequest->name}}
 </h1>
 
 <h1>
     Ваш пароль {{$password}}
 </h1>
 
-@component('mail::button', ['url' => route('email.login', $user)])
-    Подтвердить пароль
-@endcomponent
-
-<form method="POST" action="{{route('email.login', $user)}}">
+<form method="POST" action="{{route('email.login', $registerRequest)}}">
     @csrf
-    <button type="submit">Подтвердить пароль</button>
+    <x-primary-button type="submit">Подтвердить почту</x-primary-button>
 </form>
+</x-guest-layout>
+

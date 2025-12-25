@@ -6,10 +6,11 @@ use App\Http\Requests\RegisterRequestRequest;
 use App\Mail\VerifyEmail;
 use App\Models\RegisterRequest;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Exception;
 
 class RegisterController extends Controller
 {
@@ -56,8 +57,8 @@ class RegisterController extends Controller
         Log::error('error', [$req]);
         if (is_null($req['isVerified'])) {
 //            dd(is_null($req['isVerified']));
-            $req['isVerified'] = true;
-            $req->update();
+//            $req['isVerified'] = true;
+//            $req->update();
 
 //            $user = User::create([
 //                'name' => $req->name,
@@ -67,43 +68,45 @@ class RegisterController extends Controller
 //                'department' => $req->department,
 //            ]);
 
-            $user = $this->createUser($req);
+//            $this->createUser($req);
 
 //            event(new Registered($user));
-
+            $userPassword = Str::random(8);
+            $this->sendEmailVerification($req, $userPassword);
             return redirect()->route('register_request.index')->with('success', 'Email подтвержден.');
         }
         return redirect()->route('register_request.index')->with('error', 'ошибка');
     }
 
-    public function createUser(RegisterRequest $request)
+    public function createUser(Request $request)
     {
-        $userPassword = Str::random(8);
-        Log::error('Password', [$userPassword, $request->email]);
+//        $userPassword = Str::random(8);
+//        Log::error('Password', [$userPassword, $request->email]);
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $userPassword,
+            'password' => $request->userPassword,
             'tel' => $request->tel,
             'department' => $request->department,
         ]);
-        try {
-            $this->sendEmailVerification($user, $userPassword);
+
+//        $this->sendEmailVerification($user, $userPassword);
             $user->save();
-            return response(['message' => 'все прошло'], 200);
-        } catch (Exception $e) {
-            return response(['error' => $e->getMessage()], 500);
-        }
 
     }
 
     public function sendEmailVerification($user, $userPassword)
     {
-
-        Mail::to($user->email)->send(new VerifyEmail($user, $userPassword));
-
+        try {
+            Mail::to($user->email)->send(new VerifyEmail($user, $userPassword));
+            Log::error('success', [$user->email, $userPassword]);
+        } catch (Exception $e) {
+            Log::error('error', [$e]);
+            dd($e->getMessage());
+        }
 
     }
+
 
 //    public function update(RegisterRequestRequest $request, $id) {
 //        dd($id);
