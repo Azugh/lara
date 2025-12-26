@@ -17,12 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => \Hash::make(env('ADMIN_PASSWORD')),
-            'tel' => '89116972434',
-            'department' => 'Админ',
+        $this->call([
+            UserSeeder::class,
+            SliderSeeder::class,
+            CategorySeeder::class,
         ]);
     }
 }

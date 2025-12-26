@@ -69,8 +69,9 @@
                                                                     <td>{{ $slider->id }}</td>
                                                                     <td>
                                                                         @if($slider->image)
-                                                                            <img src="{{ Storage::url($slider->image) }}"
-                                                                                 width="300">
+{{--                                                                            @dd(Storage::url($slider->image))--}}
+                                                                            <img src="{{ $slider->image }}"
+                                                                                 width="300" alt="{{$slider->title}}">
                                                                         @endif
                                                                     </td>
                                                                     <td>{{ $slider->title }}</td>

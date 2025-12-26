@@ -36,14 +36,14 @@ class SliderController extends Controller
     {
 
         // $validated = $request->validated();
-        $isActive = $request['isActive'] ? true : false;
+//        $isActive = (bool)$request['isActive'];
         $request = $request->all();
         if ($request['image']) {
             $imagePath = $request['image']->store('images/slider-images', 'public');
             $request['image'] = $imagePath;
         }
 
-        $request['isActive'] = $isActive;
+//        $request['isActive'] = $isActive;
         // dd($request);
 
         // dd($validated);

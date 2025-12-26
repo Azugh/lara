@@ -27,7 +27,7 @@
                         @foreach ($category->items as $item)
                             <div class="cbp-item {{ $category->id }}">
                                 <div class="cbp-caption-defaultWrap">
-                                    <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}"/>
+                                    <img src="{{ $item->image }}" alt="{{ $item->name }}"/>
                                 </div>
                                 <div class="cbp-caption-activeWrap">
                                     <div class="cbp-l-caption-alignCenter">

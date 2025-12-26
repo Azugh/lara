@@ -26,7 +26,7 @@ Route::get('/carousel', function () {
 
 
 Route::get('/admin', function () {
-//    $sliders = DB::table('sliders')->latest('created_at')->get();
+    $sliders = DB::table('sliders')->latest('created_at')->get();
     return view('admin/admin');
 })->name('admin');
 

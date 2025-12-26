@@ -10,7 +10,7 @@
 
             @foreach ($sliders as $slider)
 
-                <li data-transition="fade"> <img src="{{ asset(Storage::url($slider->image)) }}" alt=""
+                <li data-transition="fade"> <img src="{{ asset($slider->image) }}" alt=""
                         data-bgposition="center top" data-bgfit="cover" data-bgrepeat="no-repeat" />
                     <div class="tp-caption large sfb text-center" data-x="center" data-y="263" data-speed="900"
                         data-start="800" data-easing="Sine.easeOut">{{ $slider->title }}</div>
