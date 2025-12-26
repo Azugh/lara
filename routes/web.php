@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index')->middleware('admin');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
