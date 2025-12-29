@@ -3,9 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index')->middleware('admin');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
 Route::get('/dashboard', function () {
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -28,7 +29,7 @@ Route::get('/carousel', function () {
 Route::get('/admin', function () {
     $sliders = DB::table('sliders')->latest('created_at')->get();
     return view('admin/admin');
-})->name('admin');
+})->name('admin')->middleware('admin');
 
 
 Route::resource('/admin/register_request', \App\Http\Controllers\RegisterController::class)->only([
