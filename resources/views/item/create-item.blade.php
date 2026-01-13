@@ -2,7 +2,7 @@
 @section('title', 'Создать итем')
 
 @section('main')
-    <div class="main-content" style="padding-top: 80px; margin-top: -80;">
+    <div class="main-content" style="padding-top: 80px; margin-top: -80px;">
         <div class="container">
             <div class="light-wrapper">
                 <div class="headline text-center">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="widget-header">
 
-                    <form action="{{ route('item.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.item.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Название итема</label>

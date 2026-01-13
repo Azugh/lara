@@ -10,7 +10,7 @@
                     </a>
                 </div>
                 <div class="nav-item theme-text">
-                    <a href="{{ route('admin') }}" class="nav-link"> CORK </a>
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link"> CORK </a>
                 </div>
             </div>
             <div class="nav-item sidebar-toggle">
@@ -47,10 +47,10 @@
                 </a>
                 <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
                     <li>
-                        <a href="{{ route('slider.index') }}"> Слайдеры </a>
+                        <a href="{{ route('admin.slider.index') }}"> Слайдеры </a>
                     </li>
                     <li>
-                        <a href="{{ route('register_request.index') }}"> Запросы на регистрацию </a>
+                        <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
                     </li>
                 </ul>
             </li>

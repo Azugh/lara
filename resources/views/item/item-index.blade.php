@@ -2,7 +2,7 @@
 @section('title', 'Items')
 
 @section('main')
-    <div class="main-content" style="padding-top: 80px; margin-top: -80;">
+    <div class="main-content" style="padding-top: 80px; margin-top: -80px;">
         <div class="container">
             <h1>итемы</h1>
 
@@ -10,7 +10,7 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <a href="{{ route('item.create') }}" class="btn btn-primary mb-3">Создать новый итем в категории</a>
+            <a href="{{ route('admin.item.create') }}" class="btn btn-primary mb-3">Создать новый итем в категории</a>
 
             <table class="table">
                 <thead>
@@ -32,8 +32,8 @@
                                 @endforeach
                             </td>
                             <td>
-                                <a href="{{ route('item.edit', $item) }}" class="btn btn-sm btn-warning">Изменить</a>
-                                <form action="{{ route('item.destroy', $item) }}" method="POST">
+                                <a href="{{ route('admin.item.edit', $item) }}" class="btn btn-sm btn-warning">Изменить</a>
+                                <form action="{{ route('admin.item.destroy', $item) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"

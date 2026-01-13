@@ -25,17 +25,18 @@
                 @foreach ($categories as $category)
                     @if(isset($category->items) && count($category->items) > 0)
                         @foreach ($category->items as $item)
-                            <div class="cbp-item {{ $category->id }}">
+                            <div class="cbp-item {{ $category->id }} "> <a href="{{route('item.show', ['item' => $item])}}">
                                 <div class="cbp-caption-defaultWrap">
                                     <img src="{{ $item->image }}" alt="{{ $item->name }}"/>
                                 </div>
-                                <div class="cbp-caption-activeWrap">
+                                <div class="cbp-caption-activeWrap ">
                                     <div class="cbp-l-caption-alignCenter">
                                         <div class="cbp-l-caption-body">
                                             <div class="cbp-l-caption-title">{{ $item->name }}</div>
                                         </div>
                                     </div>
                                 </div>
+                                </a>
                             </div>
                         @endforeach
                     @endif
@@ -43,10 +44,12 @@
             </div>
 
             <div class="divide30"></div>
+            @admin
             <div class="row">
-                <a href="{{ route('item-category.create') }}" class="btn btn-primary mb-3">Создать новый категорию</a>
-                <a href="{{ route('item.create') }}" class="btn btn-primary mb-3">Создать новую карточку</a>
+                <a href="{{ route('admin.item-category.create') }}" class="btn btn-primary mb-3">Создать новый категорию</a>
+                <a href="{{ route('admin.item.create') }}" class="btn btn-primary mb-3">Создать новую карточку</a>
             </div>
+            @endadmin
         @else
             <div class="alert alert-info">
                 <p>Категории пока не созданы.</p>

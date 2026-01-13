@@ -26,7 +26,7 @@
                                             <div class="row">
                                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                                     <h4 class="mb-4">Создать Слайдер</h4>
-                                                    <a href="{{ route('slider.create') }}" class="btn btn-success mb-3">
+                                                    <a href="{{ route('admin.slider.create') }}" class="btn btn-success mb-3">
                                                         Создать слайдер
                                                     </a>
                                                 </div>
@@ -88,14 +88,14 @@
                                                                         <div class="list">
                                                                             <div class="row">
                                                                                 <div class="col-xs-12 col-lg-12 col-sm-12"><a
-                                                                                        href="{{ route('slider.edit', $slider->id) }}"
+                                                                                        href="{{ route('home.index', $slider->id) }}"
                                                                                         class="btn btn-warning">Редактировать</a>
                                                                                 </div>
-                                                                                <a href="{{ route('slider.show', $slider->id) }}"
+                                                                                <a href="{{ route('admin.slider.show', $slider->id) }}"
                                                                                    class="btn btn-warning">Детали</a>
 
                                                                                 <form
-                                                                                    action="{{ route('slider.destroy', $slider->id) }}"
+                                                                                    action="{{ route('admin.slider.destroy', $slider->id) }}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
                                                                                     @method('DELETE')

@@ -19,7 +19,7 @@ class CheckAdmin
     {
 
         if(!Auth::check()){
-            return redirect()->route('login');
+            return redirect()->route('home.index');
         }
 
         $user = Auth::user();

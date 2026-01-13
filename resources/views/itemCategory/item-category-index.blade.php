@@ -10,7 +10,7 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <a href="{{ route('item-category.create') }}" class="btn btn-primary mb-3">Создать новый категорию</a>
+            <a href="{{ route('admin.item-category.create') }}" class="btn btn-primary mb-3">Создать новый категорию</a>
 
             <table class="table">
                 <thead>
@@ -25,9 +25,9 @@
                             <td>{{ $category->id }}</td>
                             <td>{{ $category->category_name }}</td>
                             <td>
-                                <a href="{{ route('item-category.edit', $category) }}"
+                                <a href="{{ route('admin.item-category.edit', $category) }}"
                                     class="btn btn-sm btn-warning">Изменить</a>
-                                <form action="{{ route('item-category.destroy', $category) }}" method="POST">
+                                <form action="{{ route('admin.item-category.destroy', $category) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Slider;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,8 @@ class SliderSeeder extends Seeder
     {
         //
 
+
+//        Slider::factory()->count(7)->create();
         DB::table('sliders')->truncate();
 //        Storage::disk('storage')->put('images/slider-images/', asset('public/images/art/slider2-bg1.jpg'));
         for ($i = 1; $i <= 3; $i++) {

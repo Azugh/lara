@@ -32,31 +32,36 @@ class CategorySeeder extends Seeder
                 file_get_contents(public_path('images/art/c' . $i . '.png'))
             );
         }
-//        ItemCategory::factory()->count(3)
-//            ->has(Item::factory()->count(3))
-//        ->create();
+        $categories = ItemCategory::factory()->count(4)
+        ->create();
 
-        for ($i = 1; $i <= 4; $i++) {
-            $items = Item::create([
-                    'name' => 'Итем ' . $i,
-                    'image' => Storage::url('images/item-images/item-image' . $i . '.png'),
-                ]);
+        $items = Item::factory()->count(7)->create();
+
+        for ($i = 1; $i <= 7; $i++) {
+            $item = Item::findOrFail($i);
+            $item['image'] =  Storage::url('images/item-images/item-image' . $i . '.png');
+            $item->save();
+
         }
-        $categories = [
-            'Категория 1' => [1,2,3,4],
-            'Категория 2' => [1,4],
-            'Категория 3' => [2,3,4],
-            'Категория 4' => [3,4],
-        ];
 
-        foreach ($categories as $categoryName => $items) {
-            $category = ItemCategory::create([
-                'category_name' => $categoryName
-            ]);
-
-            foreach ($items as $itemData) {
-                $category->items()->attach($itemData);
-            }
-        }
+        $items->each(function ($item) use ($categories) {
+           $item->categories()->attach($item['category']);
+        });
+//        $categories = [
+//            'Категория 1' => [1,2,3,4],
+//            'Категория 2' => [1,4],
+//            'Категория 3' => [2,3,4],
+//            'Категория 4' => [3,4],
+//        ];
+//
+//        foreach ($categories as $categoryName => $items) {
+//            $category = ItemCategory::create([
+//                'category_name' => $categoryName
+//            ]);
+//
+//            foreach ($items as $itemData) {
+//                $category->items()->attach($itemData);
+//            }
+//        }
     }
 }

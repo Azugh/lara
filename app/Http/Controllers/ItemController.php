@@ -7,20 +7,27 @@ use App\Models\Item;
 use App\Models\ItemCategory;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ItemController extends Controller
+class ItemController extends Controller implements HasMiddleware
 {
     //
+
+
     public function index() {
         $content = Item::with('categories')->orderBy("created_at", "desc")->get();
         return view("item.item-index", ['items' => $content]);
     }
 
     public function create() {
+
         $content = ItemCategory::orderBy("category_name")->get();
         return view("item.create-item", ['categories' => $content]);
     }
 
+    public function show(Item $item) {
+        return view("item.show-item", ['item' => $item]);
+    }
     public function store(ItemRequest $request) {
         // dd($request);
         // $item = new Item();
@@ -54,5 +61,10 @@ class ItemController extends Controller
         // if ($request['category']) {
         //     $item->categories()->attach($request['category']);
         // }
+    }
+
+    public static function middleware()
+    {
+        return ['admin'];
     }
 }

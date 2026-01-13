@@ -123,7 +123,9 @@
         </ul>
     </div>
     <!-- .container -->
-    <a href="{{ route('admin') }}" class="btn btn-sm btn-secondary float-end">
-        Назад к списку
-    </a>
+    @admin
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-secondary float-end">
+            Назад к списку
+        </a>
+    @endadmin
 </footer>

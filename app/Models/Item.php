@@ -11,8 +11,9 @@ class Item extends Model
 
     use HasFactory;
 
-    public $fillable = ['name', 'image'];
+    public $fillable = ['name', 'image', 'quantity', 'price', 'category'];
 
+    public $casts = ['price' => 'decimal:2'];
     public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(ItemCategory::class, 'item_item_category');
@@ -21,10 +22,10 @@ class Item extends Model
 
     public function getImageUrlAttribute()
     {
-        if (!$this->image) {
+        if (!$this['image']) {
             return null;
         }
 
-        return Storage::url($this->image);
+        return Storage::url($this['image']);
     }
 }
