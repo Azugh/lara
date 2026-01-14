@@ -52,6 +52,9 @@
                     <li>
                         <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.cart.index') }}"> Корзины пользователей</a>
+                    </li>
                 </ul>
             </li>
 

@@ -9,7 +9,7 @@ use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ItemController extends Controller implements HasMiddleware
+class ItemController extends Controller
 {
     //
 
@@ -63,8 +63,8 @@ class ItemController extends Controller implements HasMiddleware
         // }
     }
 
-    public static function middleware()
-    {
-        return ['admin'];
-    }
+//    public static function middleware()
+//    {
+//        return ['admin'];
+//    }
 }

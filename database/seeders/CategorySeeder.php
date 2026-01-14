@@ -44,9 +44,16 @@ class CategorySeeder extends Seeder
 
         }
 
-        $items->each(function ($item) use ($categories) {
-           $item->categories()->attach($item['category']);
+        $categories = ItemCategory::all();
+
+        Item::all()->each(function ($item) use ($categories) {
+            $item->categories()->attach(
+                $categories->random(rand(1, 3))->pluck('id')->toArray()
+            );
         });
+//        $items->each(function ($item) use ($categories) {
+//           $item->categories()->attach($item['category']);
+//        });
 //        $categories = [
 //            'Категория 1' => [1,2,3,4],
 //            'Категория 2' => [1,4],

@@ -15,12 +15,6 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::get('register_request', [\App\Http\Controllers\RegisterController::class, 'index'])->name('register_request.index');
-
-    Route::get('register_request', [\App\Http\Controllers\RegisterController::class, 'create'])->name('register_request.create');
-
-    Route::post('register_request', [\App\Http\Controllers\RegisterController::class, 'store'])->name('register_request.store');
-
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
@@ -30,9 +24,6 @@ Route::middleware('guest')->group(function () {
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
-
-    Route::get('verifyMail', [\App\Http\Controllers\RegisterController::class, 'verifyMail'])->name('verification.mail');
-
 
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
@@ -55,7 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
-
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
         ->name('password.confirm');

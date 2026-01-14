@@ -2,7 +2,7 @@
 @section('title', 'Items')
 
 @section('main')
-    <div class="main-content" style="padding-top: 80px; margin-top: -80px;">
+    <div class="main-content" style="padding-top: 80px; margin-top: 80px;">
         <div class="container">
             <h1>итемы</h1>
 

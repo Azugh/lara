@@ -26,25 +26,8 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-//        if (!$request->user()->hasVerifiedEmail()) {
-//            Auth::logout();
-//            return back()->withErrors(['email' => 'Пользователь не одобрен']);
-//        }
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
-
-    /**
-     * @param LoginRequest $request
-     *  login with email
-     * @return RedirectResponse
-     */
-    public function loginByEmail(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
-
-        $request->session()->regenerate();
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

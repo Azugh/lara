@@ -12,7 +12,6 @@ class HomeController extends Controller
 
     public function index()
     {
-
         $sliders = Slider::where('isActive', true)->latest('created_at')->get();
         $categories = ItemCategory::with('items')->latest('created_at')->get();
         // dd($categories);

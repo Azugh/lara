@@ -48,12 +48,14 @@ Route::middleware('auth')->group(function () {
 //    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
     Route::prefix('cart')->group(function () {
-       Route::get('/', [CartController::class, 'index'])->name('cart.index');
        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
+//       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
     });
 });
+
+Route::post('cart/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -77,17 +79,18 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('item-category', ItemCategoryController::class)
         ->except(['update']);
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
 });
 
+Route::resource('item', ItemController::class)->only(['index', 'show'])->names('item');
 //Route::get('sign-up', function() {
 //    return view('auth.signup');
 //})->name('sign-up');
 
-//Route::resource('register_request', \App\Http\Controllers\RegisterController::class)->only([
-//    'index',
-//    'create',
-//    'store',
-//    'destroy',
-//]);
+Route::resource('register_request', RegisterController::class)->only([
+    'create',
+]);
 
 
