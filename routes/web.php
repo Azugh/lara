@@ -11,6 +11,7 @@ use \App\Http\Controllers\ItemCategoryController;
 use \App\Models\Slider;
 use \Illuminate\Support\Facades\DB;
 use \App\Http\Controllers\CartController;
+use \App\Http\Controllers\OrderController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
@@ -45,17 +46,20 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+    Route::post('/create', [OrderController::class, 'create'])->name('order.create');
+
 //    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
     Route::prefix('cart')->group(function () {
-       Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
+        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
 //       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-       Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
-       Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
+        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
+        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
+        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
+        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
     });
 });
-
-Route::post('cart/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -82,6 +86,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
+    Route::prefix('order')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    });
 });
 
 Route::resource('item', ItemController::class)->only(['index', 'show'])->names('item');
