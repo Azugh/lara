@@ -125,6 +125,9 @@
     <!-- .container -->
     @admin
         <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-secondary float-end">
+            дэшбоард
+        </a>
+        <a href="{{ route('order.create') }}" class="btn btn-sm btn-secondary float-end">
             Назад к списку
         </a>
     @endadmin

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ItemCategory;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {

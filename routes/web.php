@@ -35,6 +35,24 @@ require __DIR__ . '/auth.php';
 Route::resource('item', ItemController::class)
     ->only(['index', 'show']);
 
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::prefix('cart')->group(function () {
+        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
+//       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
+        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
+        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
+        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
+        Route::delete('cart/{id}', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
+        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
+    });
+
+    Route::get('/create', [OrderController::class, 'create'])->name('order.create');
+    Route::post('/order/create', [OrderController::class, 'store'])->name('order.store');
+//    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -46,19 +64,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    Route::post('/create', [OrderController::class, 'create'])->name('order.create');
 
 //    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
-    Route::prefix('cart')->group(function () {
-        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
-//       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
-        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
-        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
-        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
-    });
+//    Route::prefix('cart')->group(function () {
+//        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
+////       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
+//        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
+//        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
+//        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
+//        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
+//        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
+//    });
 });
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
@@ -99,5 +116,3 @@ Route::resource('item', ItemController::class)->only(['index', 'show'])->names('
 Route::resource('register_request', RegisterController::class)->only([
     'create',
 ]);
-
-

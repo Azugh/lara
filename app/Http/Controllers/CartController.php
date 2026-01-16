@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Exception;
 use \Illuminate\Http\JsonResponse;
@@ -29,7 +30,8 @@ class CartController extends Controller
 
     }
 
-    public function show(int $user) {
+    public function show(Request $request, $user = null) {
+
         $user = User::findOrFail($user);
 //        dd($user);
         $cart = $user->getCart();
@@ -127,7 +129,6 @@ class CartController extends Controller
             $cartItem->save();
             $cart->totalPrice();
 
-
             return response()->json([
                 'success' => true,
                 'quantity' => $cartItem->quantity,
@@ -145,7 +146,7 @@ class CartController extends Controller
         }
     }
 
-    public function removeItemFromCart(Request $request, int $id) {
+    public function removeItemFromCart(int $id) {
         try {
             $cartItem = CartItem::findOrFail($id);
             $cart = $cartItem->cart;
@@ -162,11 +163,35 @@ class CartController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-
     }
 
-    public function removeAllItemsFromCart(int $user, Item $item): void {
+    public function removeAllItemsFromCart(int $id) {
 
+        try {
+            DB::beginTransaction();
+            $cart = Cart::findOrFail($id);
+            foreach ($cart->cartItems as $cartItem) {
+                $cartItem->delete();
+            }
+
+            $cart->total_price = 0;
+            $cart->total_quantity = 0;
+            $cart->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'cart_total_price' => 0,
+                'cart_total_quantity' => 0,
+            ]);
+        }
+        catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+            ]);
+        }
     }
 
     public function sendResponse(bool $status = false,

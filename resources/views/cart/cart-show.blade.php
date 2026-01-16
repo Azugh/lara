@@ -23,7 +23,7 @@
 
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="cart-{{$cart->id}}">
                 @foreach($cart->cartItems as $cartItem)
                 <tr id="cart-item-row-{{ $cartItem->id }}">
                     <td>
@@ -40,7 +40,7 @@
                         <span id="quantity{{ $cartItem->id }}">{{ $cartItem->quantity }}</span>
                     </td>
                     <td>
-                        <button class="btn-increase budicon-arrow-right-1"
+                        <button class="btn-increase budicon-arrow-right-1 btn-"
                                 data-cart-item-id="{{ $cartItem['id'] }}"></button>
                     </td>
                     <td>
@@ -66,11 +66,9 @@
                             <br>
                             Всего товаров в корзине <span id="cart-total-quantity">{{$cart->total_quantity}}</span>
                             <br>
-                            <form action="{{ route('order.create') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">Поплата</button>
-{{--                                <a href="{{ route('home.index') }}" class="btn btn-primary mb-3">Поплата</a>--}}
-                            </form>
+                            <button type="button" id="btn-checkout" class="btn btn-primary mb-3">Поплата</button>
+                            <button type="button" id="btn-delete-all" class="btn btn-primary mb-3"
+                            data-cart-id="{{ $cart['id'] }}">очистить корзину</button>
                         </div>
                     </div>
                 @else
@@ -103,6 +101,70 @@
                 // span.innerHTML = data.item_total;
             }
 
+            $(document).on('click', '#btn-delete-all', function () {
+                const cartId = $(this).data('cart-id');
+
+                if ($('#cart-total-quantity').text() === 0) {
+                    alert('Корзина пуста');
+                    return;
+                }
+                $.ajax({
+                    url: '{{ route("cart.delete", ':id') }}'.replace(':id', cartId),
+                    type: 'DELETE',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        _token: csrfToken
+                    },
+
+                    success: function (response) {
+                        updateCartSummary({
+                            cart_total_quantity: response.cart_total_quantity,
+                            cart_total_price: response.cart_total_price
+                        })
+                        $('#cart-' + cartId).fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                        $('#total-' + cartId).fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                    },
+                    error: function (response) {
+                        alert('FAILURE')
+                    }
+                })
+            });
+            $(document).on('click', '#btn-checkout', function() {
+                if ($('#cart-total-quantity').text() === 0) {
+                    alert('Корзина пуста');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route("order.store") }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Заказ успешно оформлен! Номер заказа: ' + response.order_id);
+{{--                            fetch("{{ route("home.index") }}")--}}
+                            window.location.href = response.redirect_url || '{{ route("home.index") }}';
+                        } else {
+                            alert('Ошибка: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, response) {
+
+                        alert(response.status);
+                    }
+                });
+            });
+
             $(document).on('click', '.btn-remove', function() {
                 const cartItemId = $(this).data('cart-item-id');
 
@@ -117,6 +179,7 @@
                         _token: csrfToken
                     },
                     success: function(response) {
+
 
                             $('#cart-item-row-' + cartItemId).fadeOut(300, function() {
                                 $(this).remove();
