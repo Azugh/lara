@@ -3,11 +3,10 @@
 namespace App\Observers;
 
 use App\Mail\VerifyMail;
-use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Hash;
 use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -19,7 +18,6 @@ class UserObserver implements ShouldHandleEventsAfterCommit
      */
     public function creating(User $user)
     {
-//        dd(\Hash::make('Jiir0lYo'));
         try {
             $userPassword = Str::random(8);
 
@@ -53,10 +51,12 @@ class UserObserver implements ShouldHandleEventsAfterCommit
     public function created(User $user): void
     {
         //
+//        $userPassword = Str::random(8);
+//        $user->password = $userPassword;
+//        $this->sendEmailVerification($user, $userPassword);
         Log::info('пользователь', [$user->roles()->where('role_id', 1)->exists()]);
         Log::error('message', (array)'message');
 
-//        dd($user);
 //        $this->sendEmailVerification($user);
     }
 

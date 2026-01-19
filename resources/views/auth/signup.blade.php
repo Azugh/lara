@@ -41,7 +41,7 @@
                                 <div class="form-field">
                                     <label>
                                         <input type="tel" name="tel" placeholder="Телефон: 8-xxx-xxx-xx-xx"
-                                               class="@error('tel') is-invalid @enderror" value="{{ old('tel') }}" >
+                                               class="@error('tel') is-invalid @enderror" value="{{ old('tel') }}">
                                         <i class="icon-phone"></i>
                                         @error('tel')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -67,33 +67,33 @@
                                 </div>
 
                             </div>
-{{--                            <div class="col-sm-6">--}}
-{{--                                <div class="form-field">--}}
-{{--                                    <label>--}}
-{{--                                        <input id="password" type="password" name="password" placeholder="Пароль"--}}
-{{--                                               class="@error('password') is-invalid @enderror">--}}
-{{--                                        <i class="icon-key"></i>--}}
-{{--                                        @error('password')--}}
-{{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                        @enderror--}}
-{{--                                    </label>--}}
-{{--                                </div>--}}
-{{--                                <!--/.form-field -->--}}
-{{--                            </div>--}}
-{{--                            <div class="col-sm-6">--}}
-{{--                                <div class="form-field">--}}
-{{--                                    <label for="password_confirmation">--}}
-{{--                                        <input id="password_confirmation" type="password" name="password_confirmation"--}}
-{{--                                               placeholder="Повторите пароль"--}}
-{{--                                               class="@error('password_confirmation') is-invalid @enderror">--}}
-{{--                                        <i class="icon-key"></i>--}}
-{{--                                        @error('password_confirmation')--}}
-{{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                        @enderror--}}
-{{--                                    </label>--}}
-{{--                                </div>--}}
-{{--                                <!--/.form-field -->--}}
-{{--                            </div>--}}
+                            {{--                            <div class="col-sm-6">--}}
+                            {{--                                <div class="form-field">--}}
+                            {{--                                    <label>--}}
+                            {{--                                        <input id="password" type="password" name="password" placeholder="Пароль"--}}
+                            {{--                                               class="@error('password') is-invalid @enderror">--}}
+                            {{--                                        <i class="icon-key"></i>--}}
+                            {{--                                        @error('password')--}}
+                            {{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
+                            {{--                                        @enderror--}}
+                            {{--                                    </label>--}}
+                            {{--                                </div>--}}
+                            {{--                                <!--/.form-field -->--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="col-sm-6">--}}
+                            {{--                                <div class="form-field">--}}
+                            {{--                                    <label for="password_confirmation">--}}
+                            {{--                                        <input id="password_confirmation" type="password" name="password_confirmation"--}}
+                            {{--                                               placeholder="Повторите пароль"--}}
+                            {{--                                               class="@error('password_confirmation') is-invalid @enderror">--}}
+                            {{--                                        <i class="icon-key"></i>--}}
+                            {{--                                        @error('password_confirmation')--}}
+                            {{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
+                            {{--                                        @enderror--}}
+                            {{--                                    </label>--}}
+                            {{--                                </div>--}}
+                            {{--                                <!--/.form-field -->--}}
+                            {{--                            </div>--}}
 
                         </div>
                         <textarea name="message" placeholder="Type your message here..."></textarea>

@@ -1,17 +1,18 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SliderController;
+use App\Models\Slider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\HomeController;
-use \App\Http\Controllers\Auth\AuthenticatedSessionController;
-use \App\Http\Controllers\RegisterController;
-use \App\Http\Controllers\SliderController;
-use \App\Http\Controllers\ItemCategoryController;
-use \App\Models\Slider;
-use \Illuminate\Support\Facades\DB;
-use \App\Http\Controllers\CartController;
-use \App\Http\Controllers\OrderController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
@@ -37,20 +38,24 @@ Route::resource('item', ItemController::class)
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::prefix('cartItem')->group(function () {
+        Route::post('/{item}', [CartItemController::class, 'addItemToCart'])->name('cart-item.add');
+        Route::post('cart/increase/{id}', [CartItemController::class, 'increaseItemCartQuantity'])->name('cart-item.increase');
+        Route::post('cart/decrease/{id}', [CartItemController::class, 'decreaseItemCartQuantity'])->name('cart-item.decrease');
+        Route::delete('cart/cart-item/{id}', [CartItemController::class, 'removeItemFromCart'])->name('cart-item.remove');
+    });
+
     Route::prefix('cart')->group(function () {
-        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
-//       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
-        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
-        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
         Route::delete('cart/{id}', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
-        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
     });
 
-    Route::get('/create', [OrderController::class, 'create'])->name('order.create');
-    Route::post('/order/create', [OrderController::class, 'store'])->name('order.store');
+    Route::prefix('order')->group(function () {
+        Route::get('/create', [OrderController::class, 'create'])->name('order.create');
+        Route::post('/store', [OrderController::class, 'store'])->name('order.store');
+        Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
 //    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+    });
 });
 
 Route::middleware('auth')->group(function () {
@@ -113,6 +118,8 @@ Route::resource('item', ItemController::class)->only(['index', 'show'])->names('
 //    return view('auth.signup');
 //})->name('sign-up');
 
+
 Route::resource('register_request', RegisterController::class)->only([
     'create',
+    'store'
 ]);

@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
-use Arr;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
@@ -19,7 +19,6 @@ class UserSeeder extends Seeder
         DB::table('users')->truncate();
         DB::table('roles')->truncate();
         DB::table('role_user')->truncate();
-
 
         $adminRole = new Role();
         $adminRole['name'] = 'admin';
@@ -37,7 +36,7 @@ class UserSeeder extends Seeder
 
         $adminUser->roles()->attach($adminRole);
 
-        User::factory()->createOneQuietly([
+        User::factory()->create([
             'name' => 'Тест не админ',
             'email' => 'test@mail.ru',
             'password' => config('app.admin_password'),
@@ -46,6 +45,7 @@ class UserSeeder extends Seeder
             'remember_token' => null,
         ]);
 
+
         for ($i = 1; $i < 6; $i++) {
             User::factory()->create([
                 'name' => 'Тест ' . $i,
@@ -53,7 +53,6 @@ class UserSeeder extends Seeder
                 'tel' => '8' . Arr::random(['911', '917', '981', '989']) . rand(1000000, 9999999),
                 'department' => Arr::random(['Продажи', 'Маркетинг', 'Поддержка пользователей']),
                 'remember_token' => null,
-
             ]);
         }
     }

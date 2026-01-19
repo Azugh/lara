@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequestRequest;
-use App\Mail\VerifyMail;
 use App\Models\RegisterRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -21,11 +18,6 @@ class RegisterController extends Controller
             ->where('pending_verification', false)
             ->orderBy('id', 'asc')->get();
         return view('admin.user.users', ['users' => $content]);
-    }
-
-    public function create()
-    {
-        return view('auth.signup');
     }
 
     public function store(RegisterRequestRequest $request)
@@ -42,7 +34,13 @@ class RegisterController extends Controller
             ->with('success', 'Ваш запрос отправлен на рассмотрение!');
     }
 
+    public function create()
+    {
+        return view('auth.signup');
+    }
+
     // подтверждение и создание записи в таблице users
+
     public function verifyUser($id)
     {
         $req = RegisterRequest::findOrFail($id);
@@ -57,9 +55,9 @@ class RegisterController extends Controller
             $this->createUser($req);
             //{{
 //            $this->sendEmailVerification($req, $userPassword);
-            return redirect()->route('register_request.index')->with('success', 'Email подтвержден.');
+            return redirect()->route('admin.register_request.index')->with('success', 'Email подтвержден.');
         }
-        return redirect()->route('register_request.index')->with('error', 'ошибка');
+        return redirect()->route('admin.register_request.index')->with('error', 'ошибка');
     }
 
 //    public function sendEmailVerification($user, $userPassword)
@@ -73,23 +71,6 @@ class RegisterController extends Controller
 //            dd($e->getMessage());
 //        }
 //    }
-
-    /**
-     * verify and create user by email
-     */
-    public function verifyMail(Request $request)
-    {
-        try {
-//            $reg = RegisterRequest::findOrFail($request->id);
-//            $this->createUser($reg, $request->password);
-//            $reg['isVerified'] = true;
-//            $reg->update();
-            return redirect()->route('email-is-verified');
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
-
-    }
 
     public function createUser(RegisterRequest $request)
     {
@@ -107,6 +88,23 @@ class RegisterController extends Controller
 
 //        $this->sendEmailVerification($user, $userPassword);
 //        $user->save();
+    }
+
+    /**
+     * verify and create user by email
+     */
+    public function verifyMail(Request $request)
+    {
+        try {
+//            $reg = RegisterRequest::findOrFail($request->id);
+//            $this->createUser($reg, $request->password);
+//            $reg['isVerified'] = true;
+//            $reg->update();
+            return redirect()->route('email-is-verified');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+
     }
 
 //    public function update(RegisterRequestRequest $request, $id) {

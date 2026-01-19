@@ -2,22 +2,24 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class VerifyMail extends Mailable
+class OrderPayment extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user, public string $userPassword)
+    public function __construct(public Order $order)
     {
         //
     }
@@ -27,15 +29,12 @@ class VerifyMail extends Mailable
      */
     public function envelope(): Envelope
     {
-
-        $name = $this->user->name;
-
+        $id = $this->order->id;
+        Log::alert('order id = ' . $id);
         return new Envelope(
             from: config('mail.from.address'),
-//            to: 'jeffrey_epstain@yahoo.com',
-            subject: 'Подтверждение почты ' . $name,
+            subject: 'Оплата заказа ' . $id,
             metadata: (array)'Тест',
-
         );
     }
 
@@ -45,10 +44,9 @@ class VerifyMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.verify_mail',
+            markdown: 'mail.orders.payment',
             with: [
-                'url' => url(route('verification.mail',
-                    ['id' => $this->user->id])),
+                'url' => 'route'
             ]
         );
     }

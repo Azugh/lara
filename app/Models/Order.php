@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Enums\PaymentStatus;
 use App\Enums\ShippingStatus;
+use App\Observers\OrderObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
     //
+
 
     protected $fillable = [
         'user_id',
@@ -18,27 +21,40 @@ class Order extends Model
         'shipping_status',
         'payment_status',
         'shipping_address'
-        ];
+    ];
 
     protected $casts = [
-        'shipping_address' => ShippingStatus::class,
+        'shipping_status' => ShippingStatus::class,
         'payment_status' => PaymentStatus::class,
     ];
 
-    public function cart(): \Illuminate\Database\Eloquent\Relations\HasOne
+    protected static function booted()
+    {
+        static::observe(OrderObserver::class);
+    }
+
+    public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function orderItems() {
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function orderItems()
+    {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function getCart() {
+    public function getCart()
+    {
         return $this->cart;
     }
 }

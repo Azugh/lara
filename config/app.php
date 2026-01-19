@@ -124,4 +124,6 @@ return [
     ],
 
     'admin_password' => env('ADMIN_PASSWORD', '87654321'),
+
+    'mail_from_address' => env('MAIL_FROM_ADDRESS', 'no-reply'),
 ];

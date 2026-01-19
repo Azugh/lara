@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 @extends('admin.layout.app')
 @section('title', 'Слайдеры')
 
@@ -12,8 +13,8 @@
 
                             <div class="col-lg-12">
                                 <div class="statbox widget box box-shadow">
-                                    @if(\Illuminate\Support\Facades\Auth::user())
-                                        {{\Illuminate\Support\Facades\Auth::user()->id}}
+                                    @if(Auth::user())
+                                        {{Auth::user()->id}}
                                     @else
                                         не логин
                                     @endif
@@ -69,7 +70,7 @@
                                                                             <div class="row">
 
                                                                                 <form
-                                                                                    action="{{route('verifyUser', $user->id)}}"
+                                                                                    action="{{route('admin.register_request.verify', $user->id)}}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
                                                                                     <button type="submit"
@@ -78,7 +79,7 @@
                                                                                     </button>
                                                                                 </form>
                                                                                 <form
-                                                                                    action="{{ route('slider.destroy', $user->id) }}"
+                                                                                    action="{{ route('admin.slider.destroy', $user->id) }}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
                                                                                     @method('DELETE')
