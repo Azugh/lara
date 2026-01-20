@@ -45,7 +45,6 @@
                                                                     <td>{{ $user->email }}</td>
                                                                     <td>{{ $user->department }}</td>
                                                                     <td>{{ $user->tel }}</td>
-                                                                    <td> {{$user->getRoles()}}</td>
 
 
                                                                     <td>

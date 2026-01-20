@@ -85,6 +85,14 @@ Route::middleware('auth')->group(function () {
 //    });
 });
 
+Route::group(['middleware' => ['manager']], function () {
+    Route::prefix('order')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('order.index');
+        Route::put('/{id}', [OrderController::class, 'update'])->name('order.update');
+        Route::put('/{id}/changeDeliveryStatus', [OrderController::class, 'changeDeliveryStatus'])->name('order.changeDeliveryStatus');
+    });
+});
+
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
         $sliders = DB::table('sliders')->latest('created_at')->get();
@@ -115,9 +123,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
-    Route::prefix('order')->group(function () {
-        Route::get('/', [OrderController::class, 'index'])->name('order.index');
-    });
+//    Route::prefix('order')->group(function () {
+//        Route::get('/', [OrderController::class, 'index'])->name('order.index');
+//    });
 });
 
 Route::resource('item', ItemController::class)->only(['index', 'show'])->names('item');

@@ -137,4 +137,9 @@
             Назад к списку
         </a>
     @endif
+    @if(Auth::user()?->isManager())
+        <a href="{{ route('order.index') }}" class="btn btn-sm btn-secondary float-end">
+            Заказы
+        </a>
+    @endif
 </footer>

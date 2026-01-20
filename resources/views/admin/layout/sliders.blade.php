@@ -26,7 +26,8 @@
                                             <div class="row">
                                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                                     <h4 class="mb-4">Создать Слайдер</h4>
-                                                    <a href="{{ route('admin.slider.create') }}" class="btn btn-success mb-3">
+                                                    <a href="{{ route('admin.slider.create') }}"
+                                                       class="btn btn-success mb-3">
                                                         Создать слайдер
                                                     </a>
                                                 </div>
@@ -48,19 +49,26 @@
                                                             <thead>
                                                             <tr>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">ID</th>
+                                                                    style="width: 300.300px">ID
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Изображение</th>
+                                                                    style="width: 300.300px">Изображение
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Заголовок</th>
+                                                                    style="width: 300.300px">Заголовок
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Текст слайдера</th>
+                                                                    style="width: 300.300px">Текст слайдера
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Текст кнопки</th>
+                                                                    style="width: 300.300px">Текст кнопки
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 100.100px">Слайдер активен?</th>
+                                                                    style="width: 100.100px">Слайдер активен?
+                                                                </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Действия</th>
+                                                                    style="width: 300.300px">Действия
+                                                                </th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -69,7 +77,7 @@
                                                                     <td>{{ $slider->id }}</td>
                                                                     <td>
                                                                         @if($slider->image)
-{{--                                                                            @dd(Storage::url($slider->image))--}}
+                                                                            {{--                                                                            @dd(Storage::url($slider->image))--}}
                                                                             <img src="{{ $slider->image }}"
                                                                                  width="300" alt="{{$slider->title}}">
                                                                         @endif
@@ -87,7 +95,9 @@
                                                                     <td>
                                                                         <div class="list">
                                                                             <div class="row">
-                                                                                <div class="col-xs-12 col-lg-12 col-sm-12"><a
+                                                                                <div
+                                                                                    class="col-xs-12 col-lg-12 col-sm-12">
+                                                                                    <a
                                                                                         href="{{ route('home.index', $slider->id) }}"
                                                                                         class="btn btn-warning">Редактировать</a>
                                                                                 </div>
@@ -101,10 +111,13 @@
                                                                                     @method('DELETE')
                                                                                     <button type="submit"
                                                                                             class="btn btn-primary"
-                                                                                            onclick="return confirm('Удалить?')">Удалить</button>
+                                                                                            onclick="return confirm('Удалить?')">
+                                                                                        Удалить
+                                                                                    </button>
+                                                                                </form>
+
                                                                             </div>
                                                                         </div>
-                                                                        </form>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

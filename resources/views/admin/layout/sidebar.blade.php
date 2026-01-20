@@ -16,8 +16,8 @@
             <div class="nav-item sidebar-toggle">
                 <div class="btn-toggle sidebarCollapse">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-chevrons-left">
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-chevrons-left">
                         <polyline points="11 17 6 12 11 7"></polyline>
                         <polyline points="18 17 13 12 18 7"></polyline>
                     </svg>
@@ -30,8 +30,8 @@
                 <a href="#dashboard" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-home">
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-home">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
                         </svg>
@@ -39,27 +39,34 @@
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-chevron-right">
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-chevron-right">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </div>
                 </a>
                 <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
-                    <li>
-                        <a href="{{ route('admin.slider.index') }}"> Слайдеры </a>
-                    </li>
-                    <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
+                    @if(Auth::user()?->isAdmin())
                         <li>
-                            <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
+                            <a href="{{ route('admin.slider.index') }}"> Слайдеры </a>
                         </li>
+                        <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
+                            <li>
+                                <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.user.index') }}"> Пользователи </a>
+                            </li>
+                        </ul>
                         <li>
-                            <a href="{{ route('admin.user.index') }}"> Пользователи </a>
+                            <a href="{{ route('admin.cart.index') }}"> Корзины пользователей</a>
                         </li>
-                    </ul>
-                    <li>
-                        <a href="{{ route('admin.cart.index') }}"> Корзины пользователей</a>
-                    </li>
+                    @endif
+                    @if(Auth::user()?->isManager())
+                        <li>
+                            <a href="{{ route('order.index') }}"> Заказы пользователей</a>
+                        </li>
+                    @endif
                 </ul>
             </li>
 

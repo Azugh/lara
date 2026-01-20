@@ -195,7 +195,7 @@
                     success: function (response) {
                         if (response.success) {
                             alert('Заказ успешно оформлен ' + response.order_id);
-                            {{--window.location.href = response.redirect_url || '{{ route("home.index") }}';--}}
+                            window.location.href = response.redirect_url || '{{ route("home.index") }}';
                         }
                     },
                     error: function (xhr, response) {
