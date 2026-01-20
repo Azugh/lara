@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserSeeder extends Seeder
 {
@@ -23,6 +24,10 @@ class UserSeeder extends Seeder
         $adminRole = new Role();
         $adminRole['name'] = 'admin';
         $adminRole->save();
+
+        Role::factory()->create([
+            'name' => 'manager',
+        ]);
 
         $adminUser = User::factory()->createOneQuietly([
             'name' => 'Admin',

@@ -49,9 +49,14 @@
                     <li>
                         <a href="{{ route('admin.slider.index') }}"> Слайдеры </a>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
-                    </li>
+                    <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
+                        <li>
+                            <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.user.index') }}"> Пользователи </a>
+                        </li>
+                    </ul>
                     <li>
                         <a href="{{ route('admin.cart.index') }}"> Корзины пользователей</a>
                     </li>

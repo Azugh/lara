@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Exception;
 
@@ -17,17 +16,19 @@ class CartController extends Controller
     public function index()
     {
 //        $carts = DB::table('carts')->latest('created_at')->get();
-        $carts = Cart::with('cartItems')->get();
+        $carts = Cart::with('cartItems.items')->get();
         return view('admin.cart.carts', ["carts" => $carts]);
     }
 
-    public function show(Request $request, $user = null)
+    public function show(Request $request, $id)
     {
-        $user = User::findOrFail($user);
+//        $user = Auth::user()->with('cart.cartItems')->findOrFail($id);
+//        $user = User::with('cart.cartItems')->findOrFail($id);
+//        $user = User::findOrFail($id);
 //        dd($user);
-        $cart = $user->getCart();
+//        $cart = $user->cart;
 
-        return view('cart.cart-show', ["cart" => $cart]);
+        return view('cart.cart-show', ["cart" => Auth::user()->cart]);
     }
 
 
@@ -41,10 +42,12 @@ class CartController extends Controller
 
         try {
             DB::beginTransaction();
-            $cart = Cart::findOrFail($id);
-            foreach ($cart->cartItems as $cartItem) {
-                $cartItem->delete();
-            }
+            $cart = Cart::with('cartItems')->findOrFail($id);
+            $cart->cartItems()->delete();
+//            $cart = Cart::findOrFail($id);
+//            foreach ($cart->cartItems as $cartItem) {
+//                $cartItem->delete();
+//            }
 
             $cart->total_price = 0;
             $cart->total_quantity = 0;
@@ -65,21 +68,4 @@ class CartController extends Controller
         }
     }
 
-    public function sendResponse(bool   $status = false,
-                                 string $message = '',
-                                 int    $quantity = 0,
-                                 float  $item_total = 0.0,
-                                 float  $cart_total_price = 0.0,
-                                 int    $cart_total_quantity = 0,
-                                 int    $statusCode)
-    {
-
-        return new JsonResponse([
-            'success' => $status,
-            'quantity' => $quantity,
-            'item_total' => $item_total,
-            'cart_total_price' => $cart_total_price,
-            'cart_total_quantity' => $cart_total_quantity,
-        ], $statusCode);
-    }
 }

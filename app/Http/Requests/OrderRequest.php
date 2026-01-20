@@ -25,7 +25,9 @@ class OrderRequest extends FormRequest
     {
         return [
             //
-            
+//            'cartItems' => 'required|array',
+//            'cartItems.*.product_id' => 'required|integer|exists:products,id',
+            'userAddress' => 'required|string|max:255',
         ];
     }
 }

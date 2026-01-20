@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class OrderPayment extends Mailable
 {
@@ -30,6 +31,7 @@ class OrderPayment extends Mailable
     public function envelope(): Envelope
     {
         $id = $this->order->id;
+
         Log::alert('order id = ' . $id);
         return new Envelope(
             from: config('mail.from.address'),
@@ -43,10 +45,12 @@ class OrderPayment extends Mailable
      */
     public function content(): Content
     {
+        $url = URL::signedRoute('order.payment.confirm', ['id' => $this->order->id]);
         return new Content(
             markdown: 'mail.orders.payment',
             with: [
-                'url' => 'route'
+                'order' => $this->order,
+                'url' => $url,
             ]
         );
     }

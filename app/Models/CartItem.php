@@ -10,19 +10,27 @@ class CartItem extends Model
     /**
      * @var int|mixed
      */
-    protected $fillable = ['cart_id', 'item_id', 'quantity', 'price'];
+    protected $fillable = ['name', 'cart_id', 'item_id', 'quantity', 'price'];
 
     protected $casts = ['price' => 'decimal:2'];
 
-    public function cart() {
+    public function cart()
+    {
         return $this->belongsTo(Cart::class);
     }
 
-    public function item() {
+    public function item()
+    {
         return $this->belongsTo(Item::class);
     }
 
-    public function getItem() {
+    public function getItem()
+    {
         return $this->item;
+    }
+
+    public function getSubtotal()
+    {
+        return $this['price'] * $this['quantity'];
     }
 }

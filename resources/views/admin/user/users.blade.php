@@ -33,10 +33,7 @@
                                                                 <th>email</th>
                                                                 <th>Отдел</th>
                                                                 <th>Телефон</th>
-                                                                <th>email подтвержден</th>
-                                                                <th>В ожидании</th>
-                                                                <th>Сообщение</th>
-                                                                <th>Действия</th>
+                                                                <th>Роли</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -48,48 +45,24 @@
                                                                     <td>{{ $user->email }}</td>
                                                                     <td>{{ $user->department }}</td>
                                                                     <td>{{ $user->tel }}</td>
+                                                                    <td> {{$user->getRoles()}}</td>
 
-                                                                    <td>
-                                                                        @if($user->email_verified_at)
-                                                                            Да
-                                                                        @else
-                                                                            Нет
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if($user->pending_verification)
-                                                                            Да
-                                                                        @else
-                                                                            Нет
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $user->message }}</td>
 
                                                                     <td>
                                                                         <div class="list">
                                                                             <div class="row">
 
                                                                                 <form
-                                                                                    action="{{route('admin.register_request.verify', $user->id)}}"
+                                                                                    action="{{route('admin.user.make-manager', $user->id)}}"
                                                                                     method="POST" class="d-inline">
                                                                                     @csrf
+                                                                                    @method('PUT')
                                                                                     <button type="submit"
                                                                                             class="btn btn-success">
                                                                                         Подтвердить
                                                                                     </button>
                                                                                 </form>
-                                                                                <form
-                                                                                    action="{{ route('admin.slider.destroy', $user->id) }}"
-                                                                                    method="POST" class="d-inline">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <button type="submit"
-                                                                                            class="btn btn-secondary"
-                                                                                            onclick="return confirm('Удалить?')">
-                                                                                        Удалить
-                                                                                    </button>
 
-                                                                                </form>
                                                                             </div>
                                                                         </div>
                                                                     </td>

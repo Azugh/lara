@@ -27,6 +27,7 @@
                                     <th style="text-align: center; vertical-align: middle;">Количество</th>
                                     <th style="text-align: center; vertical-align: middle;"></th>
                                     <th style="text-align: center; vertical-align: middle;">Цена</th>
+                                    <th style="text-align: center; vertical-align: middle;">Общая цена</th>
                                     <th style="text-align: center; vertical-align: middle;">Действие</th>
                                 </tr>
                                 </thead>
@@ -53,7 +54,10 @@
                                                     data-cart-item-id="{{ $cartItem['id'] }}"></button>
                                         </td>
                                         <td style="text-align: center; vertical-align: middle;">
-                                            {{$cartItem->item->price}} руб.
+                                            {{ $cartItem->price }} руб.
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            {{ $cartItem->getSubtotal() }} руб.
                                         </td>
                                         <td style="text-align: center; vertical-align: middle;">
                                             <button class="btn-remove btn btn-danger btn-sm"
@@ -65,30 +69,33 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div id="total-{{ $cartItem->id ?? 'cart' }}" style="width: 25%; float: right; display: inline-block;
+                        <div id="total-{{ $cartItem->id}}" style="width: 25%; float: right; display: inline-block;
                          border-radius: 10px; border: 1px solid darkgrey;
                          box-shadow: 5px 10px 5px lightgrey; padding: 10px; text-align: center;">
                             <div class="sidebox widget">
                                 <h4>Итоги заказа</h4>
-                                <p>Всего товаров: <span id="cart-total-quantity"
-                                                        class="fw-bold">{{$cart->total_quantity}}</span></p>
-                                <p>Общая сумма: <span id="cart-total-price"
-                                                      class="fw-bold">{{$cart->total_price}}</span>
-                                    руб.
-                                </p>
-                                <button type="button" id="btn-checkout" class="btn btn-success">Оформить заказ</button>
-                                <button type="button" id="btn-delete-all" class="btn btn-warning"
-                                        data-cart-id="{{ $cart['id'] }}">Очистить корзину
-                                </button>
+                                <p>Всего товаров: <span id="cart-total-quantity">{{$cart->total_quantity}}</span></p>
+                                <p>Общая сумма: <span id="cart-total-price">{{$cart->total_price}}</span>руб.</p>
+                                <label>
+                                    <h4>Ваш Адрес</h4>
+                                    <input id="user_address" type="text" placeholder="Ваш адрес" name="address"
+                                           value="{{old('address')}}">
+                                </label>
                             </div>
+                            <button type="button" id="btn-checkout" class="btn btn-success">Оформить заказ</button>
+                            <button type="button" id="btn-delete-all" class="btn btn-warning"
+                                    data-cart-id="{{ $cart['id'] }}">Очистить корзину
+                            </button>
                         </div>
                     </div>
-                @endif
+            </div>
+            @else
                 <div id="is-empty" class="text-center py-5">
                     <h3>Корзина пуста</h3>
                 </div>
-            </div>
+            @endif
         </div>
+    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -103,11 +110,13 @@
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             function updateCartSummary(data) {
+
                 $('#cart-total-quantity').text(data.cart_total_quantity);
                 $('#cart-total-price').text(data.cart_total_price);
             }
 
             function updateItemRow(cartItemId, data) {
+
                 $('#quantity' + cartItemId).text(data.quantity);
                 $('#item-total' + cartItemId).text(data.item_total)
                 // const span = document.getElementById('item-total' + cartItemId);
@@ -149,8 +158,9 @@
                     }
                 })
             });
+
             $(document).on('click', '#btn-checkout', function () {
-                if ($('#cart-total-quantity').text() === 0) {
+                if ($('#cart-total-quantity').text() == 0) {
                     alert('Корзина пуста');
                     return;
                 }
@@ -162,36 +172,36 @@
                     });
                 });
 
-                var data = {
-                    _token: csrfToken,
-                    cartItems: cartItems
+                const userAddress = $('#user_address').val().trim();
+
+                if (!userAddress) {
+                    alert('Пожалуйста, введите адрес доставки');
+                    return;
+                }
+
+                const data = {
+                    cartItems: cartItems,
+                    userAddress: userAddress
                 };
 
                 $.ajax({
                     url: '{{ route("order.store") }}',
                     type: 'POST',
-                    dataType:
-                        'json',
-
-                    headers:
-                        {
-                            'X-CSRF-TOKEN':
-                            csrfToken
-                        }
-                    ,
+                    data: data,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     success: function (response) {
                         if (response.success) {
-                            alert('Заказ успешно оформлен! Номер заказа: ' + response.order_id);
-                            {{--                            fetch("{{ route("home.index") }}")--}}
-                                window.location.href = response.redirect_url || '{{ route("home.index") }}';
+                            alert('Заказ успешно оформлен ' + response.order_id);
+                            {{--window.location.href = response.redirect_url || '{{ route("home.index") }}';--}}
                         }
-                    }
-                    ,
+                    },
                     error: function (xhr, response) {
                         alert(response.message);
                     }
-                })
-
+                });
             });
 
             $(document).on('click', '.btn-remove', function () {
@@ -208,7 +218,6 @@
                         _token: csrfToken
                     },
                     success: function (response) {
-
 
                         $('#cart-item-row-' + cartItemId).fadeOut(300, function () {
                             $(this).remove();
@@ -245,7 +254,6 @@
                     },
                     success: function (response) {
                         if (response.success) {
-                            // alert('TRUE' + ' ' + cartItemId);
                             updateItemRow(cartItemId, {
                                 quantity: response.quantity,
                                 item_total: response.item_total
@@ -253,7 +261,8 @@
 
                             updateCartSummary({
                                 cart_total_quantity: response.cart_total_quantity,
-                                cart_total_price: response.cart_total_price
+                                cart_total_price:
+                                response.cart_total_price
                             })
                         }
                     },

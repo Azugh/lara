@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\UserController;
 use App\Models\Slider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -53,7 +54,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('order')->group(function () {
         Route::get('/create', [OrderController::class, 'create'])->name('order.create');
         Route::post('/store', [OrderController::class, 'store'])->name('order.store');
-        Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
+        Route::put('/payment/{id}', [OrderController::class, 'payment'])->name('order.payment');
+        Route::get('/payment/{id}/confirm', [OrderController::class, 'paymentConfirm'])->name('order.payment.confirm');
 //    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
     });
 });
@@ -95,6 +97,11 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::post('register_request/{id}', [RegisterController::class, 'verifyUser'])
         ->middleware('throttle:6,1')
         ->name('register_request.verify');
+
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::put('/{id}', [UserController::class, 'makeManager'])->name('user.make-manager');
+    });
 
     Route::resource('slider', SliderController::class)
         ->except(['edit', 'update']);
