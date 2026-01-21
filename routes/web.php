@@ -39,11 +39,10 @@ Route::resource('item', ItemController::class)
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::prefix('cartItem')->group(function () {
+    Route::prefix('cartItem')->prefix('cart-item')->group(function () {
         Route::post('/{item}', [CartItemController::class, 'addItemToCart'])->name('cart-item.add');
-        Route::post('cart/increase/{id}', [CartItemController::class, 'increaseItemCartQuantity'])->name('cart-item.increase');
-        Route::post('cart/decrease/{id}', [CartItemController::class, 'decreaseItemCartQuantity'])->name('cart-item.decrease');
-        Route::delete('cart/cart-item/{id}', [CartItemController::class, 'removeItemFromCart'])->name('cart-item.remove');
+        Route::post('{id}/{action}', [CartItemController::class, 'updateItemCartQuantity'])->name('cart-item.update-quantity');
+        Route::delete('cart-item/{id}', [CartItemController::class, 'removeItemFromCart'])->name('cart-item.remove');
     });
 
     Route::prefix('cart')->group(function () {
@@ -54,9 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('order')->group(function () {
         Route::get('/create', [OrderController::class, 'create'])->name('order.create');
         Route::post('/store', [OrderController::class, 'store'])->name('order.store');
-        Route::put('/payment/{id}', [OrderController::class, 'payment'])->name('order.payment');
         Route::get('/payment/{id}/confirm', [OrderController::class, 'paymentConfirm'])->name('order.payment.confirm');
-//    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
     });
 });
 
@@ -71,25 +68,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-
-//    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
-
-//    Route::prefix('cart')->group(function () {
-//        Route::post('/{item}', [CartController::class, 'addItemToCart'])->name('cart.add');
-////       Route::post('/{item}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-//        Route::post('cart/increase/{id}', [CartController::class, 'increaseItemCartQuantity'])->name('cart.increase');
-//        Route::post('cart/decrease/{id}', [CartController::class, 'decreaseItemCartQuantity'])->name('cart.decrease');
-//        Route::delete('cart/cart-item/{id}', [CartController::class, 'removeItemFromCart'])->name('cart.remove');
-//        Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
-//        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
-//    });
 });
 
 Route::group(['middleware' => ['manager']], function () {
     Route::prefix('order')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('order.index');
-        Route::put('/{id}', [OrderController::class, 'update'])->name('order.update');
-        Route::put('/{id}/changeDeliveryStatus', [OrderController::class, 'changeDeliveryStatus'])->name('order.changeDeliveryStatus');
+        Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('order.edit');
+        Route::put('/{id}/update-shipping-status', [OrderController::class, 'updateShippingStatus'])->name('order.update-shipping-status');
+
     });
 });
 
@@ -123,16 +109,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
-//    Route::prefix('order')->group(function () {
-//        Route::get('/', [OrderController::class, 'index'])->name('order.index');
-//    });
 });
 
 Route::resource('item', ItemController::class)->only(['index', 'show'])->names('item');
-//Route::get('sign-up', function() {
-//    return view('auth.signup');
-//})->name('sign-up');
-
 
 Route::resource('register_request', RegisterController::class)->only([
     'create',

@@ -24,10 +24,6 @@ class CartItem extends Model
         return $this->belongsTo(Item::class);
     }
 
-    public function getItem()
-    {
-        return $this->item;
-    }
 
     public function getSubtotal()
     {

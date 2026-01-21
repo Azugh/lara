@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Exception;
 
@@ -24,11 +24,11 @@ class CartController extends Controller
     {
 //        $user = Auth::user()->with('cart.cartItems')->findOrFail($id);
 //        $user = User::with('cart.cartItems')->findOrFail($id);
-        $user = User::findOrFail($id);
+//        $user = User::findOrFail($id);
 //        dd($user);
-        $cart = $user->getCart();
+//        $cart = $user->cart;
 
-        return view('cart.cart-show', ["cart" => $cart]);
+        return view('cart.cart-show', ["cart" => Auth::user()->cart]);
     }
 
 
@@ -37,6 +37,9 @@ class CartController extends Controller
 
     }
 
+    /*
+     * очищение корзины
+     */
     public function removeAllItemsFromCart(int $id)
     {
 

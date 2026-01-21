@@ -77,10 +77,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles()->where('name', 'manager')->exists();
     }
 
-    public function getRoles()
-    {
-        return $this->roles()->get(['name']);
-    }
 
     /**
      * Get the attributes that should be cast.

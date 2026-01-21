@@ -21,14 +21,14 @@
                             <table id="table" class="table" style="text-align: center; vertical-align: middle;">
                                 <thead>
                                 <tr>
-                                    <th style="text-align: center; vertical-align: middle;">Изображение</th>
-                                    <th style="text-align: center; vertical-align: middle;">Название</th>
-                                    <th style="text-align: center; vertical-align: middle;"></th>
-                                    <th style="text-align: center; vertical-align: middle;">Количество</th>
-                                    <th style="text-align: center; vertical-align: middle;"></th>
-                                    <th style="text-align: center; vertical-align: middle;">Цена</th>
-                                    <th style="text-align: center; vertical-align: middle;">Общая цена</th>
-                                    <th style="text-align: center; vertical-align: middle;">Действие</th>
+                                    <th>Изображение</th>
+                                    <th>Название</th>
+                                    <th></th>
+                                    <th>Количество</th>
+                                    <th></th>
+                                    <th>Цена</th>
+                                    <th>Общая цена</th>
+                                    <th>Действие</th>
                                 </tr>
                                 </thead>
                                 <tbody id="cart-{{$cart->id}}">
@@ -57,7 +57,7 @@
                                             {{ $cartItem->price }} руб.
                                         </td>
                                         <td style="text-align: center; vertical-align: middle;">
-                                            {{ $cartItem->getSubtotal() }} руб.
+                                            <span id ="price_subtotal{{ $cartItem->id }}">{{ $cartItem->getSubtotal() }} руб. </span>
                                         </td>
                                         <td style="text-align: center; vertical-align: middle;">
                                             <button class="btn-remove btn btn-danger btn-sm"
@@ -119,6 +119,7 @@
 
                 $('#quantity' + cartItemId).text(data.quantity);
                 $('#item-total' + cartItemId).text(data.item_total)
+                $('#price_subtotal' + cartItemId).text(data.price_subtotal + ' руб.')
                 // const span = document.getElementById('item-total' + cartItemId);
                 // span.innerHTML = data.item_total;
             }
@@ -160,7 +161,7 @@
             });
 
             $(document).on('click', '#btn-checkout', function () {
-                if ($('#cart-total-quantity').text() == 0) {
+                if ($('#cart-total-quantity').text() === 0) {
                     alert('Корзина пуста');
                     return;
                 }
@@ -243,7 +244,7 @@
             $(document).on('click', '.btn-increase', function () {
                 const cartItemId = $(this).data('cart-item-id')
                 $.ajax({
-                    url: '{{ route("cart-item.increase", ":id") }}'.replace(':id', cartItemId),
+                    url: '{{ route("cart-item.update-quantity", [":id", "increase"]) }}'.replace(':id', cartItemId),
                     type: 'POST',
                     dataType: 'json',
                     headers: {
@@ -256,7 +257,8 @@
                         if (response.success) {
                             updateItemRow(cartItemId, {
                                 quantity: response.quantity,
-                                item_total: response.item_total
+                                item_total: response.item_total,
+                                price_subtotal: response.price_subtotal
                             });
 
                             updateCartSummary({
@@ -284,7 +286,7 @@
             $(document).on('click', '.btn-decrease', function () {
                 const cartItemId = $(this).data('cart-item-id')
                 $.ajax({
-                    url: '{{ route("cart-item.decrease", ":id") }}'.replace(':id', cartItemId),
+                    url: '{{ route("cart-item.update-quantity", [":id", "decrease"]) }}'.replace(':id', cartItemId),
                     type: 'POST',
                     dataType: 'json',
                     headers: {
@@ -309,7 +311,8 @@
                         // alert('TRUE' + ' ' + cartItemId);
                         updateItemRow(cartItemId, {
                             quantity: response.quantity,
-                            item_total: response.item_total
+                            item_total: response.item_total,
+                            price_subtotal: response.price_subtotal
                         });
 
                         updateCartSummary({

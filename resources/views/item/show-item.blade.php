@@ -14,7 +14,7 @@
                   enctype="multipart/form-data">
                 @csrf
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Создать слайдер</button>
+                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>
                 </div>
             </form>
             {{--            <table class="table">--}}

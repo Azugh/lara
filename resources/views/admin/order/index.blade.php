@@ -61,7 +61,7 @@
                                                                     <td>{{ $order->user->name }}</td>
                                                                     <td>{{ $order['total_price'] }} Руб</td>
                                                                     <td>{{ $order['total_quantity'] }}</td>
-                                                                    <td>{{ $order['shipping_address'] }}</td>
+                                                                    <td>{{ $order->shipping_address }}</td>
                                                                     <td>{{ $order['shipping_status'] }}</td>
                                                                     <td>{{ $order['payment_status'] }} </td>
                                                                     <td>

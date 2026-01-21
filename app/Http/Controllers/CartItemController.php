@@ -14,9 +14,10 @@ use Throwable;
 
 class CartItemController extends Controller
 {
-    //
-
-    public function addItemToCart(Request $request, Item $item): void
+    /*
+     * добавить товар в корзину
+     */
+    public function addItemToCart(Request $request, Item $item)
     {
 
         $user = Auth::user();
@@ -25,12 +26,13 @@ class CartItemController extends Controller
 
         // Есть ли товар в магазине
         if ($item['quantity'] < 1 || ($cartItem && $cartItem['quantity'] >= $item['quantity'])) {
-            return;
+            return redirect()->route('item.show', ['item' => $item])
+                ->with('Error', 'Нет товара в наличии');
         }
 
         if ($cartItem) {
             $cartItem->update(['quantity' => $cartItem['quantity'] + 1]);
-            dd($cartItem->getItem()->image);
+//            dd($cartItem->getItem()->image);
         } else {
             CartItem::create([
                 'name' => $item['name'],
@@ -42,18 +44,33 @@ class CartItemController extends Controller
         }
 
         $cart->totalPrice();
+
+        return redirect()->route('item.show', ['item' => $item])
+            ->with('Info', 'Товар добавлен в корзину');
     }
 
-    public function increaseItemCartQuantity(Request $request, int $id): JsonResponse
-    {
-//        updateItemCartQuantity($id, 'increase');
+    /*
+     * Ajax обновить количество товара в корзине
+     */
+    public function updateItemCartQuantity($id, $sign) {
+
         try {
             DB::beginTransaction();
-            $cartItem = CartItem::findOrFail($id);
+            $cartItem = CartItem::find($id);
 
-            $cartItem['quantity'] += 1;
+            if ($sign == 'increase') {
+                $cartItem->quantity += 1;
+            }
+            elseif ($sign == 'decrease') {
+                $cartItem->quantity -= 1;
+            }
+            else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Что ты отправил?'
+                ]);
+            }
             if ($cartItem['quantity'] > $cartItem->item->quantity) {
-//                return $this->sendResponse(status: false, message: '405', statusCode: 405);
                 return response()->json([
                     'success' => false,
                     'message' => 'Больше товара нет'
@@ -74,59 +91,119 @@ class CartItemController extends Controller
                 'item_total' => $cartItem->quantity * $cartItem->price,
                 'cart_total_price' => $cart->total_price,
                 'cart_total_quantity' => $cart->total_quantity,
+                'price_subtotal' => $cartItem->getSubtotal(),
             ]);
-        } catch (Exception $e) {
+        }
+        catch (Throwable $e) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
-            ], 500);
-        } catch (Throwable $e) {
-            DB::rollBack();
-        }
+                ], 500);
+}
     }
+    /*
+     * увеличить количество товаров в корзине на 1
+     * TODO DRY
+     */
+//    public function increaseItemCartQuantity(Request $request, int $id): JsonResponse
+//    {
+////        updateItemCartQuantity($id, 'increase');
+//        try {
+//            DB::beginTransaction();
+//            $cartItem = CartItem::findOrFail($id);
+//
+//            $cartItem['quantity'] += 1;
+//            if ($cartItem['quantity'] > $cartItem->item->quantity) {
+////                return $this->sendResponse(status: false, message: '405', statusCode: 405);
+//                return response()->json([
+//                    'success' => false,
+//                    'message' => 'Больше товара нет'
+//                ], 405);
+//            }
+//            $cartItem->save();
+//
+//            $cart = $cartItem->cart;
+//            Log::alert('cart ' . $cart);
+//
+//            $cart->totalPrice();
+//            Log::alert('cart ' . $cart->total_price);
+//
+//            DB::commit();
+//            return response()->json([
+//                'success' => true,
+//                'quantity' => $cartItem->quantity,
+//                'item_total' => $cartItem->quantity * $cartItem->price,
+//                'cart_total_price' => $cart->total_price,
+//                'cart_total_quantity' => $cart->total_quantity,
+//                'price_subtotal' => $cartItem->getSubtotal(),
+//            ]);
+//        } catch (Exception $e) {
+//            DB::rollBack();
+//            return response()->json([
+//                'success' => false,
+//                'message' => $e->getMessage(),
+//            ], 500);
+//        } catch (Throwable $e) {
+//            DB::rollBack();
+//            return response()->json([
+//                'success' => false,
+//                'message' => $e->getMessage(),
+//            ], 500);
+//        }
+//    }
+//
+//    /*
+//     * уменьшить количество товаров в корзине на 1
+//     */
+//    public function decreaseItemCartQuantity(Request $request, int $id)
+//    {
+//        try {
+//
+//            DB::beginTransaction();
+//            $cartItem = CartItem::findOrFail($id);
+//            $cart = $cartItem->cart;
+//            $cartItem['quantity'] -= 1;
+//            if ($cartItem['quantity'] < 1) {
+//                $cartItem->delete();
+//                $cart->totalPrice();
+//                return response()->json([
+//                    'success' => true,
+//                    'quantity' => $cartItem->quantity,
+//                    'item_total' => $cartItem->quantity * $cartItem->price,
+//                    'cart_total_price' => $cart->total_price,
+//                    'cart_total_quantity' => $cart->total_quantity,
+//                    'price_subtotal' => $cartItem->getSubtotal(),
+//                ]);
+//            }
+//            $cartItem->save();
+//            $cart->totalPrice();
+//
+//            DB::commit();
+//            return response()->json([
+//                'success' => true,
+//                'quantity' => $cartItem->quantity,
+//                'item_total' => $cartItem->quantity * $cartItem->price,
+//                'cart_total_price' => $cart->total_price,
+//                'cart_total_quantity' => $cart->total_quantity,
+//                'price_subtotal' => $cartItem->getSubtotal(),
+//
+//            ]);
+//
+//        } catch (Exception $e) {
+//            DB::rollBack();
+//            return response()->json([
+//                'success' => false,
+//                'message' => $e->getMessage(),
+//            ], 500);
+//        } catch (Throwable $e) {
+//            DB::rollBack();
+//        }
+//    }
 
-    public function decreaseItemCartQuantity(Request $request, int $id)
-    {
-        try {
-            DB::beginTransaction();
-            $cartItem = CartItem::findOrFail($id);
-            $cart = $cartItem->cart;
-            $cartItem['quantity'] -= 1;
-            if ($cartItem['quantity'] < 1) {
-                $cartItem->delete();
-                $cart->totalPrice();
-                return response()->json([
-                    'success' => true,
-                    'quantity' => $cartItem->quantity,
-                    'item_total' => $cartItem->quantity * $cartItem->price,
-                    'cart_total_price' => $cart->total_price,
-                    'cart_total_quantity' => $cart->total_quantity,
-                ]);
-            }
-            $cartItem->save();
-            $cart->totalPrice();
-
-            DB::commit();
-            return response()->json([
-                'success' => true,
-                'quantity' => $cartItem->quantity,
-                'item_total' => $cartItem->quantity * $cartItem->price,
-                'cart_total_price' => $cart->total_price,
-                'cart_total_quantity' => $cart->total_quantity,
-            ]);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
-        } catch (Throwable $e) {
-            DB::rollBack();
-        }
-    }
-
+    /*
+     * убрать товар из корзины
+     */
     public function removeItemFromCart(int $id)
     {
         try {
@@ -152,6 +229,10 @@ class CartItemController extends Controller
             ], 500);
         } catch (Throwable $e) {
             DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }

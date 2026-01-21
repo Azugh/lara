@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
 use App\Enums\ShippingStatus;
+use App\Http\Requests\ChangeShippingStatusRequest;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ class OrderController extends Controller
     }
 
     /*
-     * Create Order
+     * создание заказа из корзины пользователя
      */
     public function store(OrderRequest $request)
     {
@@ -38,6 +38,9 @@ class OrderController extends Controller
             $cart = Auth::user()->cart;
             Log::alert('request ' . $request->userAddress);
 
+            /*
+             * проверка наличия товаров в корзине
+             */
             if ($cart->total_quantity == 0) {
                 return response()->json([
                     'success' => false,
@@ -45,8 +48,10 @@ class OrderController extends Controller
                 ], 400);
             }
 
+            /*
+             * проверка наличия товара в "магазине"
+             */
             foreach ($cart->cartItems as $cartItem) {
-
 //                $item = $cartItem->item;
                 if ($cartItem->item->quantity < $cartItem->quantity) {
                     return response()->json([
@@ -56,6 +61,9 @@ class OrderController extends Controller
                 }
             }
 
+            /*
+             * Создание заказа для пользователя
+             */
             $order = Order::create([
                 'user_id' => Auth::user()->id,
                 'total_quantity' => $cart->total_quantity,
@@ -65,6 +73,9 @@ class OrderController extends Controller
                 'shipping_address' => $request->userAddress,
             ]);
 
+            /*
+             * заполнение заказа товарами из корзины
+             */
             foreach ($cart->cartItems as $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -73,12 +84,19 @@ class OrderController extends Controller
                     'item_name' => $cartItem->item->name,
                 ]);
 
-                $cartItem->item->quantity -= $cartItem->quantity;
-                $cartItem->item->save();
+                /*
+                 * уменьшение кол-ва товаров в "магазине"
+                 * на кол-во товаров в корзине->заказе
+                 */
+//                $cartItem->item->quantity -= $cartItem->quantity;
+//                $cartItem->item->save();
             }
 
-            $cart->cartItems()->delete();
-            $cart->totalPrice();
+            /*
+             * очистка корзины
+             */
+//            $cart->cartItems()->delete();
+//            $cart->totalPrice();
 
             DB::commit();
 
@@ -111,17 +129,30 @@ class OrderController extends Controller
         return redirect()->route('order.store', compact('cart', 'user'));
     }
 
-    public function update(Request $request)
+//    public function update(Request $request)
+//    {
+//
+//    }
+
+    /*
+     * Мэнеджер изменяет статус заказа
+     */
+    public function updateShippingStatus(ChangeShippingStatusRequest $request, $id)
     {
-        dd($request['shipping_status']);
+
+        $order = Order::find($id);
+        /*
+         * никаких движений при не оплаченном заказе
+         */
+        if ($order->payment_status == PaymentStatus::PENDING) {
+            Log::alert('Заказ не оплачен' . $order->id);
+        }
+        $order->shipping_status = $request->shipping_status;
+        $order->save();
+
+        return back();
     }
 
-    public function changeDeliveryStatus(string $id)
-    {
-        $order = Order::findOrFail($id);
-
-        return view('manager.order.changeDeliveryStatus', compact('order'));
-    }
 
 //    public function payment(string $id)
 //    {
@@ -138,6 +169,7 @@ class OrderController extends Controller
 
     /*
      * TODO make view like cart view with only info about order
+     * Пользователь в письме подтверждает оплату
      */
     public function paymentConfirm(string $id)
     {
@@ -145,12 +177,21 @@ class OrderController extends Controller
             return view('auth.login');
         }
 
-        $user = Auth::user();
-        $order = $user->orders()->where('id', $id)->firstOrFail();
-        $order['payment_status'] = PaymentStatus::PAID;
-        $order['payment_date'] = Carbon::now();
+//        $user = Auth::user();
+        Log::alert('Пользователь сделал покупку ' . Auth::id() . ' ' . Auth::user()->name);
+
+        $order = Auth::user()->orders()->where('id', $id)->firstOrFail();
+        $order->payment_status = PaymentStatus::PAID;
+        $order->payment_date = Carbon::now();
         $order->save();
         return redirect()->route('home.index')->with('info', 'Товар оплачен');
+    }
+
+    public function edit(string $id)
+    {
+        $order = Order::findOrFail($id);
+
+        return view('manager.order.edit', compact('order'));
     }
 
 }
