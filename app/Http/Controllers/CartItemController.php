@@ -51,12 +51,14 @@ class CartItemController extends Controller
 
     /*
      * Ajax обновить количество товара в корзине
+     * TODO requestы нормы
+     * TODO выпилить транзы норм json response
      */
     public function updateItemCartQuantity($id, $sign) {
 
         try {
-            DB::beginTransaction();
             $cartItem = CartItem::find($id);
+            $cart = $cartItem->cart;
 
             if ($sign == 'increase') {
                 $cartItem->quantity += 1;
@@ -76,15 +78,28 @@ class CartItemController extends Controller
                     'message' => 'Больше товара нет'
                 ], 405);
             }
-            $cartItem->save();
 
+            if ($cartItem['quantity'] < 1) {
+                $cartItem->delete();
+                $cart->totalPrice();
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $cartItem->quantity,
+                    'item_total' => $cartItem->quantity * $cartItem->price,
+                    'cart_total_price' => $cart->total_price,
+                    'cart_total_quantity' => $cart->total_quantity,
+                    'price_subtotal' => $cartItem->getSubtotal(),
+                ]);
+            }
+
+            $cartItem->save();
+            //TODO
             $cart = $cartItem->cart;
             Log::alert('cart ' . $cart);
 
             $cart->totalPrice();
             Log::alert('cart ' . $cart->total_price);
 
-            DB::commit();
             return response()->json([
                 'success' => true,
                 'quantity' => $cartItem->quantity,
@@ -95,7 +110,6 @@ class CartItemController extends Controller
             ]);
         }
         catch (Throwable $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),

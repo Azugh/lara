@@ -13,7 +13,7 @@
                                     <div class="widget-header">
                                         <div class="row">
                                             <h4>Создание нового слайдера</h4>
-                                            <a href="{{ route('slider.index') }}"
+                                            <a href="{{ route('admin.slider.index') }}"
                                                class="btn btn-sm btn-secondary float-end">
                                                 Назад к списку
                                             </a>
@@ -24,7 +24,7 @@
 
                             <div class="statbox widget box box-shadow">
                                 <div class="widget-header">
-                                    <form action="{{ route('slider.store') }}" method="POST"
+                                    <form action="{{ route('admin.slider.store') }}" method="POST"
                                           enctype="multipart/form-data">
                                         @csrf
                                         <div class="col-lg-12 layout-top-spacing">
@@ -79,7 +79,7 @@
 
                                         <div class="d-grid gap-2">
                                             <button type="submit" class="btn btn-primary">Создать слайдер</button>
-                                            <a href="{{ route('slider.index') }}" class="btn btn-secondary">Отмена</a>
+                                            <a href="{{ route('admin.slider.index') }}" class="btn btn-secondary">Отмена</a>
                                         </div>
                                     </form>
                                 </div>

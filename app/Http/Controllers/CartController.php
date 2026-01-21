@@ -6,6 +6,7 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PHPUnit\Exception;
 
 //TODO Make guests be able to buy stuff
@@ -31,6 +32,12 @@ class CartController extends Controller
         return view('cart.cart-show', ["cart" => Auth::user()->cart]);
     }
 
+    public function getCart()
+    {
+        if (request()->ajax()) {
+            Log::info("cart ");
+        }
+    }
 
     public function create()
     {
