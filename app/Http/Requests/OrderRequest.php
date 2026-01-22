@@ -3,8 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderRequest extends FormRequest
 {
@@ -25,9 +28,30 @@ class OrderRequest extends FormRequest
     {
         return [
             //
-//            'cartItems' => 'required|array',
-//            'cartItems.*.product_id' => 'required|integer|exists:products,id',
+//            'cartID' => 'required|exists:carts,id',
             'userAddress' => 'required|string|max:255',
         ];
+    }
+
+
+    public function failedValidation(Validator $validator)
+    {
+        Log::alert('errors', $validator->errors()->all());
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Ошибка валидации',
+            'errors' => $validator->errors()->all()
+        ], 422));
+    }
+
+    public function prepareForValidation()
+    {
+        if ($this->isJson()) {
+            $jsonData = json_decode($this->getContent(), true);
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $this->merge([$jsonData]);
+            }
+        }
     }
 }

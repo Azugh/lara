@@ -41,6 +41,7 @@ class RegisterController extends Controller
 
     // подтверждение и создание записи в таблице users
 
+    //TODO ОБЗЕРВЕР
     public function verifyUser($id)
     {
         $req = RegisterRequest::findOrFail($id);

@@ -35,7 +35,7 @@
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
                         </svg>
-                        <span>Dashboard</span>
+                        <span>Дэшбоард</span>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -45,32 +45,32 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
+                <ul id="dashboard" class="collapse submenu list-unstyled show" data-bs-parent="#accordionExample">
                     @if(Auth::user()?->isAdmin())
-                        <li>
-                            <a href="{{ route('admin.slider.index') }}"> Слайдеры </a>
+                        <li class="menu">
+                            <a href="{{ route('admin.slider.index') }}">
+                                Слайдеры </a>
                         </li>
-                        <ul class="collapse submenu list-unstyled" id="dashboard" data-bs-parent="#accordionExample">
-                            <li>
-                                <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.user.index') }}"> Пользователи </a>
-                            </li>
-                        </ul>
-                        <li>
-                            <a href="{{ route('admin.cart.index') }}"> Корзины пользователей</a>
+                        <li class="menu">
+                            <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
+                        </li>
+                        <li class="menu">
+                            <a href="{{ route('admin.user.index') }}">
+                                Пользователи </a>
+                        </li>
+                        <li class="menu">
+                            <a href="{{ route('admin.cart.index') }}">
+                                <span>Корзины пользователей</span>
+                            </a>
                         </li>
                     @endif
                     @if(Auth::user()?->isManager())
-                        <li>
-                            <a href="{{ route('order.index') }}"> Заказы пользователей</a>
+                        <li class="menu">
+                            <a class="dropdown-toggle" href="{{ route('order.index') }}" aria-expanded="false"> Заказы
+                                пользователей</a>
                         </li>
                     @endif
                 </ul>
-            </li>
-
-
         </ul>
 
     </nav>

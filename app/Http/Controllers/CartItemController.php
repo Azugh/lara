@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartItemUpdateRequest;
 use App\Models\CartItem;
 use App\Models\Item;
 use Illuminate\Http\JsonResponse;
@@ -43,6 +44,7 @@ class CartItemController extends Controller
             ]);
         }
 
+        Log::alert('item добавлен в корзину');
         $cart->totalPrice();
 
         return redirect()->route('item.show', ['item' => $item])
@@ -54,59 +56,45 @@ class CartItemController extends Controller
      * TODO requestы нормы
      * TODO выпилить транзы норм json response
      */
-    public function updateItemCartQuantity($id, $sign) {
+    public function updateItemCartQuantity(Request $request, $id) {
 
         try {
-            $cartItem = CartItem::find($id);
+            $cartItem = CartItem::findOrFail($id);
             $cart = $cartItem->cart;
 
-            if ($sign == 'increase') {
-                $cartItem->quantity += 1;
-            }
-            elseif ($sign == 'decrease') {
-                $cartItem->quantity -= 1;
-            }
-            else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Что ты отправил?'
-                ]);
-            }
+            $change = $request->sign == 'increase' ? 1 : -1;
+            $cartItem->quantity += $change;
+
             if ($cartItem['quantity'] > $cartItem->item->quantity) {
-                return response()->json([
+                return response()->json(([
                     'success' => false,
-                    'message' => 'Больше товара нет'
-                ], 405);
+                    'message' => 'Количество товара в корзине не может превышать количество товара в "магазине"'
+                ]), 405);
             }
 
-            if ($cartItem['quantity'] < 1) {
+            if ($change === -1 && $cartItem->quantity < 1) {
                 $cartItem->delete();
                 $cart->totalPrice();
                 return response()->json([
                     'success' => true,
-                    'quantity' => $cartItem->quantity,
-                    'item_total' => $cartItem->quantity * $cartItem->price,
-                    'cart_total_price' => $cart->total_price,
-                    'cart_total_quantity' => $cart->total_quantity,
-                    'price_subtotal' => $cartItem->getSubtotal(),
-                ]);
+                    'message' => 'Товар был удален из корзины'
+                ], 200);
             }
 
             $cartItem->save();
             //TODO
             $cart = $cartItem->cart;
-            Log::alert('cart ' . $cart);
+//            Log::alert('cart ' . $cart);
 
             $cart->totalPrice();
-            Log::alert('cart ' . $cart->total_price);
+//            Log::alert('cart ' . $cart->total_price);
+
+            Log::alert('пользлователь ' . $cart->user->id  . ' изменил количество '
+                . $cartItem->quantity - $change . ' товара ' . $cartItem->name . ' на ' . $cartItem->quantity);
 
             return response()->json([
                 'success' => true,
-                'quantity' => $cartItem->quantity,
-                'item_total' => $cartItem->quantity * $cartItem->price,
-                'cart_total_price' => $cart->total_price,
-                'cart_total_quantity' => $cart->total_quantity,
-                'price_subtotal' => $cartItem->getSubtotal(),
+                'message' => 'Товар обновлен'
             ]);
         }
         catch (Throwable $e) {
@@ -116,104 +104,6 @@ class CartItemController extends Controller
                 ], 500);
 }
     }
-    /*
-     * увеличить количество товаров в корзине на 1
-     * TODO DRY
-     */
-//    public function increaseItemCartQuantity(Request $request, int $id): JsonResponse
-//    {
-////        updateItemCartQuantity($id, 'increase');
-//        try {
-//            DB::beginTransaction();
-//            $cartItem = CartItem::findOrFail($id);
-//
-//            $cartItem['quantity'] += 1;
-//            if ($cartItem['quantity'] > $cartItem->item->quantity) {
-////                return $this->sendResponse(status: false, message: '405', statusCode: 405);
-//                return response()->json([
-//                    'success' => false,
-//                    'message' => 'Больше товара нет'
-//                ], 405);
-//            }
-//            $cartItem->save();
-//
-//            $cart = $cartItem->cart;
-//            Log::alert('cart ' . $cart);
-//
-//            $cart->totalPrice();
-//            Log::alert('cart ' . $cart->total_price);
-//
-//            DB::commit();
-//            return response()->json([
-//                'success' => true,
-//                'quantity' => $cartItem->quantity,
-//                'item_total' => $cartItem->quantity * $cartItem->price,
-//                'cart_total_price' => $cart->total_price,
-//                'cart_total_quantity' => $cart->total_quantity,
-//                'price_subtotal' => $cartItem->getSubtotal(),
-//            ]);
-//        } catch (Exception $e) {
-//            DB::rollBack();
-//            return response()->json([
-//                'success' => false,
-//                'message' => $e->getMessage(),
-//            ], 500);
-//        } catch (Throwable $e) {
-//            DB::rollBack();
-//            return response()->json([
-//                'success' => false,
-//                'message' => $e->getMessage(),
-//            ], 500);
-//        }
-//    }
-//
-//    /*
-//     * уменьшить количество товаров в корзине на 1
-//     */
-//    public function decreaseItemCartQuantity(Request $request, int $id)
-//    {
-//        try {
-//
-//            DB::beginTransaction();
-//            $cartItem = CartItem::findOrFail($id);
-//            $cart = $cartItem->cart;
-//            $cartItem['quantity'] -= 1;
-//            if ($cartItem['quantity'] < 1) {
-//                $cartItem->delete();
-//                $cart->totalPrice();
-//                return response()->json([
-//                    'success' => true,
-//                    'quantity' => $cartItem->quantity,
-//                    'item_total' => $cartItem->quantity * $cartItem->price,
-//                    'cart_total_price' => $cart->total_price,
-//                    'cart_total_quantity' => $cart->total_quantity,
-//                    'price_subtotal' => $cartItem->getSubtotal(),
-//                ]);
-//            }
-//            $cartItem->save();
-//            $cart->totalPrice();
-//
-//            DB::commit();
-//            return response()->json([
-//                'success' => true,
-//                'quantity' => $cartItem->quantity,
-//                'item_total' => $cartItem->quantity * $cartItem->price,
-//                'cart_total_price' => $cart->total_price,
-//                'cart_total_quantity' => $cart->total_quantity,
-//                'price_subtotal' => $cartItem->getSubtotal(),
-//
-//            ]);
-//
-//        } catch (Exception $e) {
-//            DB::rollBack();
-//            return response()->json([
-//                'success' => false,
-//                'message' => $e->getMessage(),
-//            ], 500);
-//        } catch (Throwable $e) {
-//            DB::rollBack();
-//        }
-//    }
 
     /*
      * убрать товар из корзины
@@ -221,28 +111,16 @@ class CartItemController extends Controller
     public function removeItemFromCart(int $id)
     {
         try {
-            DB::beginTransaction();
 
             $cartItem = CartItem::findOrFail($id);
-            $cart = $cartItem->cart;
             $cartItem->delete();
-            $cart->totalPrice();
+            $cartItem->cart->totalPrice();
 
-            DB::commit();
             return response()->json([
                 'success' => true,
-                'cart_total_price' => $cart->total_price,
-                'cart_total_quantity' => $cart->total_quantity,
+                'message' => 'Товар убран из корзины'
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
-        } catch (Throwable $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),

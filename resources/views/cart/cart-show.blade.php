@@ -14,84 +14,10 @@
 
             <a href="{{ route('home.index') }}" class="btn btn-primary mb-3">Вернуться на главную</a>
 
-            <div class="container inline" id="cart_id">
-
-                    @include('cart.partial.partial-cart-show')
-{{--                    <div class="container">--}}
-{{--                        <div style="width: 70%; line-height: 35px; display: inline-block; float: left">--}}
-{{--                            <table id="table" class="table" style="text-align: center; vertical-align: middle;">--}}
-{{--                                <thead>--}}
-{{--                                <tr>--}}
-{{--                                    <th>Изображение</th>--}}
-{{--                                    <th>Название</th>--}}
-{{--                                    <th></th>--}}
-{{--                                    <th>Количество</th>--}}
-{{--                                    <th></th>--}}
-{{--                                    <th>Цена</th>--}}
-{{--                                    <th>Общая цена</th>--}}
-{{--                                    <th>Действие</th>--}}
-{{--                                </tr>--}}
-{{--                                </thead>--}}
-{{--                                <tbody id="cart-{{$cart->id}}">--}}
-{{--                                @foreach($cart->cartItems as $cartItem)--}}
-{{--                                    <tr id="cart-item-row-{{ $cartItem->id }}"--}}
-{{--                                        style="text-align: center; vertical-align: middle;">--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <img src="{{ $cartItem->item->image }}" alt="{{ $cartItem->item->name }}"--}}
-{{--                                                 style="max-width: 100px; max-height: 100px; object-fit: contain;">--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            {{$cartItem->item->name}}--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <button class="btn btn-decrease budicon-arrow-left-1"--}}
-{{--                                                    data-cart-item-id="{{ $cartItem['id'] }}"></button>--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <span id="quantity{{ $cartItem->id }}">{{ $cartItem->quantity }}</span>--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <button class="btn btn-increase budicon-arrow-right-1"--}}
-{{--                                                    data-cart-item-id="{{ $cartItem['id'] }}"></button>--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            {{ $cartItem->price }} руб.--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <span id ="price_subtotal{{ $cartItem->id }}">{{ $cartItem->getSubtotal() }} руб. </span>--}}
-{{--                                        </td>--}}
-{{--                                        <td style="text-align: center; vertical-align: middle;">--}}
-{{--                                            <button class="btn-remove btn btn-danger btn-sm"--}}
-{{--                                                    data-cart-item-id="{{ $cartItem['id'] }}">Удалить--}}
-{{--                                            </button>--}}
-{{--                                        </td>--}}
-{{--                                    </tr>--}}
-{{--                                @endforeach--}}
-{{--                                </tbody>--}}
-{{--                            </table>--}}
-{{--                        </div>--}}
-{{--                        <div id="total-{{ $cartItem->id}}" style="width: 25%; float: right; display: inline-block;--}}
-{{--                         border-radius: 10px; border: 1px solid darkgrey;--}}
-{{--                         box-shadow: 5px 10px 5px lightgrey; padding: 10px; text-align: center;">--}}
-{{--                            <div class="sidebox widget">--}}
-{{--                                <h4>Итоги заказа</h4>--}}
-{{--                                <p>Всего товаров: <span id="cart-total-quantity">{{$cart->total_quantity}}</span></p>--}}
-{{--                                <p>Общая сумма: <span id="cart-total-price">{{$cart->total_price}}</span>руб.</p>--}}
-{{--                                <label>--}}
-{{--                                    <h4>Ваш Адрес</h4>--}}
-{{--                                    <input id="user_address" type="text" placeholder="Ваш адрес" name="address"--}}
-{{--                                           value="{{old('address')}}">--}}
-{{--                                </label>--}}
-{{--                            </div>--}}
-{{--                            <button type="button" id="btn-checkout" class="btn btn-success">Оформить заказ</button>--}}
-{{--                            <button type="button" id="btn-delete-all" class="btn btn-warning"--}}
-{{--                                    data-cart-id="{{ $cart['id'] }}">Очистить корзину--}}
-{{--                            </button>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
+            <div id="cart-container">
+                @include('cart.partial.partial-cart-show', ['cart' => $cart])
+            </div>
         </div>
-    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -103,241 +29,116 @@
         // });
 
         async function updateCart() {
-            const response = await fetch("{{ route('') }}")
-            const html = response.text();
-
-            document.getElementById('cart_id').innerHTML = html;
+            const response = await fetch('{{ route("cart.partial", $cart->id ) }}');
+            const html = await response.text();
+            document.getElementById('cart-container').innerHTML = html;
         }
+
 
         $(document).ready(function () {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            function updateCartSummary(data) {
+            updateCart()
 
-                $('#cart-total-quantity').text(data.cart_total_quantity);
-                $('#cart-total-price').text(data.cart_total_price);
-            }
-
-            function updateItemRow(cartItemId, data) {
-
-                $('#quantity' + cartItemId).text(data.quantity);
-                $('#item-total' + cartItemId).text(data.item_total)
-                $('#price_subtotal' + cartItemId).text(data.price_subtotal + ' руб.')
-                // const span = document.getElementById('item-total' + cartItemId);
-                // span.innerHTML = data.item_total;
-            }
-
-            $(document).on('click', '#btn-delete-all', function () {
+            $(document).on('click', '#btn-checkout', async function () {
                 const cartId = $(this).data('cart-id');
-
-                if ($('#cart-total-quantity').text() === 0) {
-                    alert('Корзина пуста');
-                    return;
-                }
-                $.ajax({
-                    url: '{{ route("cart.delete", ':id') }}'.replace(':id', cartId),
-                    type: 'DELETE',
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: {
-                        _token: csrfToken
-                    },
-
-                    success: function (response) {
-                        updateCartSummary({
-                            cart_total_quantity: response.cart_total_quantity,
-                            cart_total_price: response.cart_total_price
-                        })
-                        $('#cart-' + cartId).fadeOut(300, function () {
-                            $(this).remove();
-                        });
-                        $('#total-' + cartId).fadeOut(300, function () {
-                            $(this).remove();
-                        });
-                    },
-                    error: function (response) {
-                        alert('FAILURE')
-                    }
-                })
-            });
-
-            $(document).on('click', '#btn-checkout', function () {
-                if ($('#cart-total-quantity').text() === 0) {
-                    alert('Корзина пуста');
-                    return;
-                }
-
-                var cartItems = [];
-                $('.cart-item-row-').each(function () {
-                    cartItems.push({
-                        product_id: $(this).data('product-id')
-                    });
-                });
-
                 const userAddress = $('#user_address').val().trim();
 
-                if (!userAddress) {
-                    alert('Пожалуйста, введите адрес доставки');
-                    return;
+                const response = await fetch('{{ route("order.store") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userAddress: userAddress
+                    }),
+                });
+                if (response.ok) {
+                    console.log('корзина обновлена')
+                    await updateCart();
                 }
-
-                const data = {
-                    cartItems: cartItems,
-                    userAddress: userAddress
-                };
-
-                $.ajax({
-                    url: '{{ route("order.store") }}',
-                    type: 'POST',
-                    data: data,
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Заказ успешно оформлен ' + response.order_id);
-                            window.location.href = response.redirect_url || '{{ route("home.index") }}';
-                        }
-                    },
-                    error: function (xhr, response) {
-                        alert(response.message);
+                else {
+                    const data = await response.json();
+                    if (data.errors.includes('The user address field is required.')) {
+                        $('#user_address').css('border-color', 'red');
+                        $('#address-error').text('Введите адрес');
                     }
-                });
+                }
             });
 
-            $(document).on('click', '.btn-remove', function () {
+            $(document).on('click', '#btn-delete-all', async function () {
+                const cartId = $(this).data('cart-id');
+                const response = await fetch('{{ route("cart.delete", ":id") }}'.replace(':id', cartId), {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                });
+                if (response.ok) {
+                    console.log('корзина очишена');
+                    await updateCart();
+                }
+            });
+
+            $(document).on('click', '.btn-remove', async function () {
                 const cartItemId = $(this).data('cart-item-id');
-
-                $.ajax({
-                    url: '{{ route("cart-item.remove", ":id") }}'.replace(':id', cartItemId),
-                    type: 'DELETE',
-                    dataType: 'json',
+                const response = await fetch('{{ route("cart-item.remove", ":id") }}'.replace(':id', cartItemId), {
+                    method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': csrfToken,
                     },
-                    data: {
-                        _token: csrfToken
-                    },
-                    success: function (response) {
-
-                        $('#cart-item-row-' + cartItemId).fadeOut(300, function () {
-                            $(this).remove();
-                        });
-                        if (response.cart_total_quantity === 0) {
-                            $('#total-' + cartItemId).fadeOut(300, function () {
-                                $(this).remove();
-                            });
-                            $('.table').hide();
-                            $('is-empty').show();
-                        }
-                        updateCartSummary({
-                            cart_total_quantity: response.cart_total_quantity,
-                            cart_total_price: response.cart_total_price
-                        });
-                    },
-                    error: function (xhr) {
-                        alert(xhr);
-                    }
                 });
+                if (response.ok) {
+                    console.log('Товар удален из корзины');
+                    await updateCart();
+                }
             });
 
-            $(document).on('click', '.btn-increase', function () {
-                const cartItemId = $(this).data('cart-item-id')
-                $.ajax({
-                    url: '{{ route("cart-item.update-quantity", [":id", "increase"]) }}'.replace(':id', cartItemId),
-                    type: 'POST',
-                    dataType: 'json',
+            $(document).on('click', '.btn-increase', async function () {
+                const cartItemId = $(this).data('cart-item-id');
+                const response = await fetch('{{ route("cart-item.update-quantity", ":id") }}'.replace(':id', cartItemId), {
+                    method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
                     },
-                    data: {
-                        _token: csrfToken
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            updateItemRow(cartItemId, {
-                                quantity: response.quantity,
-                                item_total: response.item_total,
-                                price_subtotal: response.price_subtotal
-                            });
+                    body: JSON.stringify({
+                        sign: 'increase',
+                    }),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    await updateCart()
+                    // alert(data.message);
+                    console.log(data.message);
+                }
+            })
 
-                            updateCartSummary({
-                                cart_total_quantity: response.cart_total_quantity,
-                                cart_total_price:
-                                response.cart_total_price
-                            })
-                        }
-                    },
-                    error: function (response) {
-                        let msg;
-                        switch (response.status) {
-                            case 405:
-                                msg = '405';
-                                break;
-                            default:
-                                msg = 'FALSE';
-                                break;
-                        }
-                        alert(msg + ' ' + cartItemId);
-                    }
-                })
-            });
 
-            $(document).on('click', '.btn-decrease', function () {
-                const cartItemId = $(this).data('cart-item-id')
-                $.ajax({
-                    url: '{{ route("cart-item.update-quantity", [":id", "decrease"]) }}'.replace(':id', cartItemId),
-                    type: 'POST',
-                    dataType: 'json',
+            $(document).on('click', '.btn-decrease', async function () {
+                const cartItemId = $(this).data('cart-item-id');
+                const response = await fetch('{{ route("cart-item.update-quantity", ":id") }}'.replace(':id', cartItemId), {
+                    method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
                     },
-                    data: {
-                        _token: csrfToken
-                    },
-                    success: function (response) {
-
-                        if (response.quantity === 0) {
-                            $('#cart-item-row-' + cartItemId).fadeOut(300, function () {
-                                $(this).remove();
-                            });
-
-                            if (response.cart_total_quantity === 0) {
-                                $('#total-' + cartItemId).fadeOut(300, function () {
-                                    $(this).remove();
-                                });
-                            }
-                        }
-                        // alert('TRUE' + ' ' + cartItemId);
-                        updateItemRow(cartItemId, {
-                            quantity: response.quantity,
-                            item_total: response.item_total,
-                            price_subtotal: response.price_subtotal
-                        });
-
-                        updateCartSummary({
-                            cart_total_quantity: response.cart_total_quantity,
-                            cart_total_price: response.cart_total_price
-                        })
-                    },
-                    error: function (response) {
-                        let msg;
-                        switch (response.status) {
-                            case 405:
-                                msg = '405';
-                                break;
-                            default:
-                                msg = 'FALSE';
-                                break;
-                        }
-                        alert(msg);
-                    }
-                })
-            });
-        });
+                    body: JSON.stringify({
+                        sign: 'decrease',
+                    }),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    await updateCart()
+                    // alert(data.message);
+                    console.log(data.message);
+                }
+            })
+        })
     </script>
 
 @endsection

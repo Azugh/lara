@@ -41,13 +41,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('cartItem')->prefix('cart-item')->group(function () {
         Route::post('/{item}', [CartItemController::class, 'addItemToCart'])->name('cart-item.add');
-        Route::post('{id}/{action}', [CartItemController::class, 'updateItemCartQuantity'])->name('cart-item.update-quantity');
+        Route::post('{id}/update-quantity', [CartItemController::class, 'updateItemCartQuantity'])->name('cart-item.update-quantity');
         Route::delete('cart-item/{id}', [CartItemController::class, 'removeItemFromCart'])->name('cart-item.remove');
     });
 
     Route::prefix('cart')->group(function () {
         Route::delete('cart/{id}', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
         Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
+        Route::get('{id}/partial', [CartController::class, 'partial'])->name('cart.partial');
     });
 
     Route::prefix('order')->group(function () {

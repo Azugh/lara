@@ -17,7 +17,7 @@ class CartController extends Controller
     public function index()
     {
 //        $carts = DB::table('carts')->latest('created_at')->get();
-        $carts = Cart::with('cartItems.items')->get();
+        $carts = Cart::with('cartItems')->get();
         return view('admin.cart.carts', ["carts" => $carts]);
     }
 
@@ -29,14 +29,13 @@ class CartController extends Controller
 //        dd($user);
 //        $cart = $user->cart;
 
-        return view('cart.cart-show', ["cart" => Auth::user()->cart]);
+        return view('cart.cart-show', ["cart" => Auth::user()->getCart()]);
     }
 
-    public function getCart()
-    {
-        if (request()->ajax()) {
-            Log::info("cart ");
-        }
+    public function partial($id) {
+
+        return view('cart.partial.partial-cart-show', ["cart" => Cart::findOrFail($id)])->render();
+
     }
 
     public function create()
@@ -51,7 +50,6 @@ class CartController extends Controller
     {
 
         try {
-            DB::beginTransaction();
             $cart = Cart::with('cartItems')->findOrFail($id);
             $cart->cartItems()->delete();
 //            $cart = Cart::findOrFail($id);
@@ -63,7 +61,6 @@ class CartController extends Controller
             $cart->total_quantity = 0;
             $cart->save();
 
-            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -71,7 +68,6 @@ class CartController extends Controller
                 'cart_total_quantity' => 0,
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
             ]);

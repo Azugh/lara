@@ -16,15 +16,15 @@ class UserController extends Controller
     }
 
     // подтвердить email
-//    public function verifyEmail($id)
-//    {
-//        $user = User::findOrFail($id);
-//        if (!$user->hasVerifiedEmail()) {
-//            $user->markEmailAsVerified();
-//            return redirect()->route('user.index')->with('success', 'Email подтвержден.');
-//        }
-//        return redirect()->route('user.index')->with('error', 'ошибка');
-//    }
+    public function verifyEmail($id)
+    {
+        $user = User::findOrFail($id);
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            return redirect()->route('user.index')->with('success', 'Email подтвержден.');
+        }
+        return redirect()->route('user.index')->with('error', 'ошибка');
+    }
 
     public function update($id) {
         $user = User::findOrFail($id);

@@ -28,10 +28,10 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
+        Log::alert('order request ' . $request);
         try {
             Log::alert('order stored' . $request->cartItems);
 
-            DB::beginTransaction();
 //            $user = Auth::user();
 //            $cart = $user->cart;
 
@@ -88,17 +88,16 @@ class OrderController extends Controller
                  * уменьшение кол-ва товаров в "магазине"
                  * на кол-во товаров в корзине->заказе
                  */
-//                $cartItem->item->quantity -= $cartItem->quantity;
-//                $cartItem->item->save();
+                $cartItem->item->quantity -= $cartItem->quantity;
+                $cartItem->item->save();
             }
 
             /*
              * очистка корзины
              */
-//            $cart->cartItems()->delete();
-//            $cart->totalPrice();
+            $cart->cartItems()->delete();
+            $cart->totalPrice();
 
-            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -109,7 +108,6 @@ class OrderController extends Controller
             ]);
 
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Ошибка: ' . $e->getMessage()
