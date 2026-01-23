@@ -22,9 +22,9 @@ class CategorySeeder extends Seeder
 //            ->has(Item::factory()->count(3))
 //            ->create();
 
-        DB::table('item_categories')->truncate();
-        DB::table('items')->truncate();
-        DB::table('item_item_category')->truncate();
+//        DB::table('item_categories')->truncate();
+//        DB::table('items')->truncate();
+//        DB::table('item_item_category')->truncate();
 
         for ($i = 1; $i <= 7; $i++) {
             Storage::disk('public')->put(

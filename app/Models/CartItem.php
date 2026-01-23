@@ -10,9 +10,7 @@ class CartItem extends Model
     /**
      * @var int|mixed
      */
-    protected $fillable = ['name', 'cart_id', 'item_id', 'quantity', 'price'];
-
-    protected $casts = ['price' => 'decimal:2'];
+    protected $fillable = ['name', 'cart_id', 'item_id', 'quantity',];
 
     public function cart()
     {
@@ -27,6 +25,6 @@ class CartItem extends Model
 
     public function getSubtotal()
     {
-        return $this['price'] * $this['quantity'];
+        return $this->item->price * $this['quantity'];
     }
 }

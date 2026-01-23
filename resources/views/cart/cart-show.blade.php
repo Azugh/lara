@@ -32,8 +32,31 @@
             const response = await fetch('{{ route("cart.partial", $cart->id ) }}');
             const html = await response.text();
             document.getElementById('cart-container').innerHTML = html;
+
         }
 
+        function errorHandler(data, status) {
+            const itemCartError = $('#cart-item-error');
+
+            switch (status) {
+                case 405:
+                    itemCartError.addClass('alert alert-danger');
+                    itemCartError.text(data.message);
+                    // alert(data.message);
+                    break;
+                case 200:
+                    itemCartError.addClass('alert alert-success');
+                    itemCartError.text(data.message);
+                    // alert(data.message);
+                    break;
+                case 422:
+                    const userAddress = $('#user_address');
+                    const addressError = $('#address-error');
+                    userAddress.css('border-color', 'red');
+                    addressError.text('Введите адрес');
+                    break;
+            }
+        }
 
         $(document).ready(function () {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -42,8 +65,11 @@
 
             $(document).on('click', '#btn-checkout', async function () {
                 const cartId = $(this).data('cart-id');
-                const userAddress = $('#user_address').val().trim();
+                const userAddress = $('#user_address');
+                const addressError = $('address-error');
 
+                userAddress.css('border-color', '');
+                addressError.text('');
                 const response = await fetch('{{ route("order.store") }}', {
                     method: 'POST',
                     headers: {
@@ -52,7 +78,7 @@
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        userAddress: userAddress
+                        userAddress: userAddress.val().trim()
                     }),
                 });
                 if (response.ok) {
@@ -61,11 +87,8 @@
                 }
                 else {
                     const data = await response.json();
-                    if (data.errors.includes('The user address field is required.')) {
-                        $('#user_address').css('border-color', 'red');
-                        $('#address-error').text('Введите адрес');
+                    errorHandler(data, response.status);
                     }
-                }
             });
 
             $(document).on('click', '#btn-delete-all', async function () {
@@ -113,8 +136,14 @@
                     const data = await response.json();
                     await updateCart()
                     // alert(data.message);
-                    console.log(data.message);
+                    console.log(data);
                 }
+                else {
+                    const data = await response.json();
+                    // alert(response.status);
+                    errorHandler(data, response.status);
+                }
+
             })
 
 

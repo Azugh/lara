@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('cart')->group(function () {
         Route::delete('cart/{id}', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
-        Route::get('/{id}', [CartController::class, 'show'])->name('cart.show');
+        Route::get('/', [CartController::class, 'show'])->name('cart.show');
         Route::get('{id}/partial', [CartController::class, 'partial'])->name('cart.partial');
     });
 
@@ -89,7 +89,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('register_request', RegisterController::class)
         ->only(['index']);
 
-    Route::post('register_request/{id}', [RegisterController::class, 'verifyUser'])
+    Route::put('register_request/{id}', [RegisterController::class, 'verifyUser'])
         ->middleware('throttle:6,1')
         ->name('register_request.verify');
 

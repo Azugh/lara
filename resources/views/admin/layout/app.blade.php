@@ -10,10 +10,11 @@
 @endsection
 
 @section('main')
+{{--    TODO  sidebar-closed sbar-open Сворачивает сайдбар--}}
     <div class="main-container " id="container">
 
         <div class="overlay"></div>
-        <div class="cs-overlay"></div>
+{{--        <div class="cs-overlay"></div>--}}
         <div class="search-overlay"></div>
         @include('admin.layout.sidebar')
 

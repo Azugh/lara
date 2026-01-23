@@ -34,6 +34,13 @@ class OrderRequest extends FormRequest
     }
 
 
+    public function messages(): array
+    {
+        return [
+            'userAddress.required' => 'Адрес обязателен для заполнения',
+            'userAddress.max' => 'Поле не может содержать больше 255 символов'
+        ];
+    }
     public function failedValidation(Validator $validator)
     {
         Log::alert('errors', $validator->errors()->all());

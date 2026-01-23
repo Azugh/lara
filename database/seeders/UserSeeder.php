@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RegisterRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -17,9 +18,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('users')->truncate();
-        DB::table('roles')->truncate();
-        DB::table('role_user')->truncate();
+//        DB::table('users')->truncate();
+//        DB::table('roles')->truncate();
+//        DB::table('role_user')->truncate();
 
         $adminRole = new Role();
         $adminRole['name'] = 'admin';
@@ -60,5 +61,7 @@ class UserSeeder extends Seeder
                 'remember_token' => null,
             ]);
         }
+
+
     }
 }

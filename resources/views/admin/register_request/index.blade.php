@@ -1,6 +1,5 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
 @extends('admin.layout.app')
-@section('title', 'Слайдеры')
+@section('title', 'Запросы на регистрацию')
 
 @section('content')
     <div id="content" class="main-content">
@@ -13,7 +12,7 @@
 
                             <div class="statbox widget box box-shadow">
 
-                                <h4 class="mb-4">Пользователи </h4>
+                                <h4 class="mb-4">Запросы на регистрацию </h4>
 
                                 <div class="row layout-top-spacing">
                                     <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
@@ -47,7 +46,7 @@
                                                                         <div class="row">
 
                                                                             <form
-                                                                                action="{{route('admin.user.make-manager', $user->id)}}"
+                                                                                action="{{route('admin.register_request.verify', $user->id)}}"
                                                                                 method="POST" class="d-inline">
                                                                                 @csrf
                                                                                 @method('PUT')

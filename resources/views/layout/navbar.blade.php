@@ -39,15 +39,19 @@
                 @endguest
                 @auth
                     <li><a href="{{ route('dashboard') }}">Профиль</a></li>
-                    <li><a href="{{ route('cart.show', auth()->id()) }}">Корзина</a></li>
+                    <li><a href="{{ route('cart.show') }}">Корзина</a></li>
 
-                <li><a href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </li>
+                    <li><a href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                    <li>
+                        {{\Illuminate\Support\Facades\Auth::user()->name}}
+                    </li>
                 @endauth
             </ul>
             <!-- /.navbar-nav -->

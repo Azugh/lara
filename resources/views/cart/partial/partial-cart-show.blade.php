@@ -38,7 +38,7 @@
                                         data-cart-item-id="{{ $cartItem['id'] }}"></button>
                             </td>
                             <td style="text-align: center; vertical-align: middle;">
-                                {{ $cartItem->price }} руб.
+                                {{ $cartItem->item->price }} руб.
                             </td>
                             <td style="text-align: center; vertical-align: middle;">
                                 <span id="price_subtotal{{ $cartItem->id }}">{{ $cartItem->getSubtotal() }} руб.</span>
@@ -49,6 +49,8 @@
                                 </button>
                             </td>
                         </tr>
+                        <br>
+                        <div id="cart-item-error"></div>
                     @endforeach
                     </tbody>
                 </table>
@@ -63,13 +65,15 @@
                     <label>
                         <h4>Ваш Адрес</h4>
                         <input id="user_address" type="text" placeholder="Ваш адрес" name="address"
-                               value="{{old('address')}}">
+                               value="{{old('address')}}" style="width: 200px"> <br>
                         <span id="address-error" class="text-danger"></span>
                     </label>
                 </div>
-                <button type="button" id="btn-checkout" class="btn btn-success">Оформить заказ</button>
-                <button type="button" id="btn-delete-all" class="btn btn-warning"
-                        data-cart-id="{{ $cart['id'] }}">Очистить корзину
+                <button type="button" id="btn-checkout" class="btn btn-success" style="width: 200px; height: auto">
+                    Оформить заказ
+                </button>
+                <button type="button" id="btn-delete-all" class="btn btn-red"
+                        data-cart-id="{{ $cart['id'] }}" style="width: 200px; height: auto">Очистить корзину
                 </button>
             </div>
         </div>

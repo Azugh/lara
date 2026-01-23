@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail
@@ -49,7 +50,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getCart()
     {
-        return $this->cart ?? $this->cart()->create();
+        if (Auth::check()) {
+            return Cart::firstOrCreate(['user_id' => Auth::id()]);
+        }
+        return Cart::firstOrCreate(['session_id' => session()->getId()]);
     }
 
     public function cart()

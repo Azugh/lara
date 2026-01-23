@@ -17,7 +17,7 @@ class RegisterController extends Controller
         $content = RegisterRequest::where('isVerified', null)
             ->where('pending_verification', false)
             ->orderBy('id', 'asc')->get();
-        return view('admin.user.users', ['users' => $content]);
+        return view('admin.register_request.index', ['users' => $content]);
     }
 
     public function store(RegisterRequestRequest $request)
@@ -56,9 +56,11 @@ class RegisterController extends Controller
             $this->createUser($req);
             //{{
 //            $this->sendEmailVerification($req, $userPassword);
-            return redirect()->route('admin.register_request.index')->with('success', 'Email подтвержден.');
+            return redirect()->route('admin.register_request.index')
+                ->with('success', 'Email подтвержден.');
         }
-        return redirect()->route('admin.register_request.index')->with('error', 'ошибка');
+        return redirect()->route('admin.register_request.index')
+            ->with('error', 'ошибка');
     }
 
 //    public function sendEmailVerification($user, $userPassword)

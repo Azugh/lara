@@ -5,7 +5,7 @@
         <div class="navbar-nav theme-brand flex-row  text-center">
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
-                    <a href="./index.html">
+                    <a href="{{route('home.index')}}">
                         <img src="" class="navbar-logo" alt="logo">
                     </a>
                 </div>
@@ -25,9 +25,10 @@
             </div>
         </div>
         <div class="shadow-bottom"></div>
-        <ul class="list-unstyled menu-categories" id="accordionExample">
-            <li class="menu">
-                <a href="#dashboard" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <ul class="list-unstyled menu-categories ps ps--active-y" id="accordionExample">
+            <li class="menu active">
+                {{--aria-expanded положение стрелки--}}
+                <a href="#dashboard" data-bs-toggle="collapse" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -45,32 +46,35 @@
                         </svg>
                     </div>
                 </a>
-                <ul id="dashboard" class="collapse submenu list-unstyled show" data-bs-parent="#accordionExample">
+                {{--show открыи/закрыт список--}}
+                <ul id="dashboard" class="collapse submenu list-unstyled" data-bs-parent="#accordionExample">
                     @if(Auth::user()?->isAdmin())
-                        <li class="menu">
+                        <li class="active">
                             <a href="{{ route('admin.slider.index') }}">
-                                Слайдеры </a>
+                                <span>Слайдеры</span></a>
                         </li>
-                        <li class="menu">
+                        <li class="">
                             <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
                         </li>
-                        <li class="menu">
+                        <li class="">
                             <a href="{{ route('admin.user.index') }}">
-                                Пользователи </a>
+                                <span>Пользователи</span>
+                            </a>
                         </li>
-                        <li class="menu">
+                        <li class="">
                             <a href="{{ route('admin.cart.index') }}">
                                 <span>Корзины пользователей</span>
                             </a>
                         </li>
                     @endif
                     @if(Auth::user()?->isManager())
-                        <li class="menu">
-                            <a class="dropdown-toggle" href="{{ route('order.index') }}" aria-expanded="false"> Заказы
-                                пользователей</a>
+                        <li class="">
+                            <a href="{{ route('order.index') }}">
+                                <span>Заказы пользователей</span></a>
                         </li>
                     @endif
                 </ul>
+            </li>
         </ul>
 
     </nav>

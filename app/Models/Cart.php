@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Cart extends Model
 {
     //
-    protected $fillable = ['user_id', 'total_price', 'total_quantity'];
+    protected $fillable = ['user_id', 'total_price', 'total_quantity',
+        'session_id'
+    ];
 
     protected $casts = ['total_price' => 'decimal:2'];
 
@@ -24,8 +26,17 @@ class Cart extends Model
 
     public function totalPrice()
     {
-        $totalPrice = $this->cartItems()->sum(DB::raw('quantity * price'));
-        $totalQuantity = $this->cartItems()->sum(DB::raw('quantity'));
+
+        $totalPrice = $this->cartItems()->with('item')->get()->sum(
+            function ($cartItem) {
+                return $cartItem->item->price * $cartItem->quantity;
+            }
+        );
+        $totalQuantity = $this->cartItems()->get()->sum(
+            function ($cartItem) {
+                return $cartItem->quantity;
+            }
+        );
 
         $this->update(['total_price' => $totalPrice, 'total_quantity' => $totalQuantity]);
     }

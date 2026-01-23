@@ -1,6 +1,7 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
 <footer class="inverse-wrapper">
-    <div class="container inner">
+{{--    <div class="main-content" style="padding-top: 5px; margin-top: 5px;">--}}
+    <div class="container inner" style="margin-top: 10px">
         <div class="row">
             <div class="col-sm-4">
                 <h3 class="section-title widget-title">Elsewhere</h3>

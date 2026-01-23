@@ -28,7 +28,7 @@ class CartItemController extends Controller
         // Есть ли товар в магазине
         if ($item['quantity'] < 1 || ($cartItem && $cartItem['quantity'] >= $item['quantity'])) {
             return redirect()->route('item.show', ['item' => $item])
-                ->with('Error', 'Нет товара в наличии');
+                ->with('OutOfStock', 'Товара нет в наличии');
         }
 
         if ($cartItem) {
@@ -36,19 +36,18 @@ class CartItemController extends Controller
 //            dd($cartItem->getItem()->image);
         } else {
             CartItem::create([
-                'name' => $item['name'],
+//                'name' => $item['name'],
                 'item_id' => $item['id'],
                 'cart_id' => $cart->id,
                 'quantity' => 1,
-                'price' => $item['price'],
+//                'price' => $item['price'],
             ]);
         }
 
         Log::alert('item добавлен в корзину');
         $cart->totalPrice();
 
-        return redirect()->route('item.show', ['item' => $item])
-            ->with('Info', 'Товар добавлен в корзину');
+        return redirect()->back()->with('success', 'Товар добавлен в корзину');
     }
 
     /*
@@ -88,9 +87,6 @@ class CartItemController extends Controller
 
             $cart->totalPrice();
 //            Log::alert('cart ' . $cart->total_price);
-
-            Log::alert('пользлователь ' . $cart->user->id  . ' изменил количество '
-                . $cartItem->quantity - $change . ' товара ' . $cartItem->name . ' на ' . $cartItem->quantity);
 
             return response()->json([
                 'success' => true,

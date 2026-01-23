@@ -1,49 +1,55 @@
-@extends('layout.index')
-@section('title', 'Items')
+<div class="container layout-top-spacing">
+    <h1>итемы</h1>
 
-@section('main')
-    <div class="main-content" style="padding-top: 80px; margin-top: 80px;">
-        <div class="container">
-            <h1>итемы</h1>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+{{--TODO Доделать саорачивание сайдбара возможно js ajax--}}
+    <div id="filters-container" class="cbp-filter-container text-center">
+        @if(isset($categories) && count($categories) > 0)
+            <div class="cbp-panel">
+                <div data-filter="*" class="cbp-filter-item-active cbp-filter-item"> All</div>
 
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+                @foreach ($categories as $category)
+                    <div data-filter=".{{ $category->id }}" class="cbp-filter-item">
+                        {{ $category->category_name }}
+                    </div>
+                @endforeach
+            </div>
+
+            <div id="grid-container" class="cbp">
+                @foreach ($categories as $category)
+                    @if(isset($category->items) && count($category->items) > 0)
+                        @foreach ($category->items as $item)
+                            <div class="cbp-item {{ $category->id }} col-xxl-4 col-xl-6 col-lg-6 col-md-6"><a
+                                    href="{{route('item.show', ['item' => $item])}}">
+                                    <div class="cbp-caption-defaultWrap card-img-top">
+                                        <img src="{{ $item->image }}" alt="{{ $item->name }}"/>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    @endif
+                @endforeach
+            </div>
+
+            <div class="divide30"></div>
+            @if(\Illuminate\Support\Facades\Auth::user()?->isAdmin())
+                <div class="row">
+                    <a href="{{ route('admin.item-category.create') }}" class="btn btn-primary mb-3">Создать
+                        новый
+                        категорию</a>
+                    <a href="{{ route('admin.item.create') }}" class="btn btn-primary mb-3">Создать новую
+                        карточку</a>
+                </div>
             @endif
 
-            <a href="{{ route('admin.item.create') }}" class="btn btn-primary mb-3">Создать новый итем в категории</a>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Имя</th>
-                        <th>Категории</th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($items as $item)
-                        <tr>
-                            <td>{{ $item->id }}</td>
-                            <td>{{ $item->name }}</td>
-                            <td>
-                                @foreach($item->categories as $category)
-                                    <span class="bg-secondary">{{ $category->category_name }}</span>
-                                @endforeach
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.item.edit', $item) }}" class="btn btn-sm btn-warning">Изменить</a>
-                                <form action="{{ route('admin.item.destroy', $item) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Да или Да?')">Удалить</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        @else
+            <div class="alert alert-info">
+                <p>Категории пока не созданы.</p>
+                <a href="{{ route('item-category.create') }}" class="btn btn-primary">Создать первую
+                    категорию</a>
+            </div>
+        @endif
     </div>
-@endsection
+</div>

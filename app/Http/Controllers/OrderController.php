@@ -118,7 +118,7 @@ class OrderController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $cart = Auth::user()->cart;
+        $cart = Auth::user()->getCart();
         if ($cart->total_quantity == 0) {
             return redirect()->route('cart.show', ['id' => $user->id])
                 ->with('error', 'Корзина пуста');

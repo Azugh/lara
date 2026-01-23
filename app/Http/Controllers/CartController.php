@@ -21,18 +21,28 @@ class CartController extends Controller
         return view('admin.cart.carts', ["carts" => $carts]);
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
 //        $user = Auth::user()->with('cart.cartItems')->findOrFail($id);
 //        $user = User::with('cart.cartItems')->findOrFail($id);
 //        $user = User::findOrFail($id);
 //        dd($user);
 //        $cart = $user->cart;
+        Log::alert('cart.show ' . $request);
+//        if (Auth::check()) {
+            $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+//        } else {
+//            $cart = Cart::firstOrCreate(['session_id' => session()->getId()]);
+//        }
+//
+//        $cart->load('cartItems');
 
-        return view('cart.cart-show', ["cart" => Auth::user()->getCart()]);
+        $cart->load('cartItems.item');
+        return view('cart.cart-show', compact(['cart']));
     }
 
-    public function partial($id) {
+    public function partial($id)
+    {
 
         return view('cart.partial.partial-cart-show', ["cart" => Cart::findOrFail($id)])->render();
 
