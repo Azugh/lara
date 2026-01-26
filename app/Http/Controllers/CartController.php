@@ -21,30 +21,24 @@ class CartController extends Controller
         return view('admin.cart.carts', ["carts" => $carts]);
     }
 
-    public function show(Request $request)
+    public function show()
     {
-//        $user = Auth::user()->with('cart.cartItems')->findOrFail($id);
-//        $user = User::with('cart.cartItems')->findOrFail($id);
-//        $user = User::findOrFail($id);
-//        dd($user);
-//        $cart = $user->cart;
-        Log::alert('cart.show ' . $request);
-//        if (Auth::check()) {
-            $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
-//        } else {
-//            $cart = Cart::firstOrCreate(['session_id' => session()->getId()]);
-//        }
-//
-//        $cart->load('cartItems');
-
-        $cart->load('cartItems.item');
+//        Log::alert('cart.show ' . $request->getContent());
+        $cart = Cart::with('cartItems.item')->where('user_id', Auth::id())->first();
+        if (!$cart) {
+            $cart = Cart::create(['user_id' => Auth::id()]);
+            $cart->load('cartItems.item');
+        }
         return view('cart.cart-show', compact(['cart']));
     }
 
     public function partial($id)
     {
-
-        return view('cart.partial.partial-cart-show', ["cart" => Cart::findOrFail($id)])->render();
+        try {
+            return view('cart.partial.partial-cart-show', ["cart" => Cart::findOrFail($id)])->render();
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+        }
 
     }
 

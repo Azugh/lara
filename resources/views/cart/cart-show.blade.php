@@ -30,9 +30,7 @@
 
         async function updateCart() {
             const response = await fetch('{{ route("cart.partial", $cart->id ) }}');
-            const html = await response.text();
-            document.getElementById('cart-container').innerHTML = html;
-
+            document.getElementById('cart-container').innerHTML = await response.text();
         }
 
         function errorHandler(data, status) {
@@ -41,13 +39,14 @@
             switch (status) {
                 case 405:
                     itemCartError.addClass('alert alert-danger');
-                    itemCartError.text(data.message);
+                    // itemCartError.text(data.message);
+                    itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
                     // alert(data.message);
                     break;
                 case 200:
                     itemCartError.addClass('alert alert-success');
-                    itemCartError.text(data.message);
-                    // alert(data.message);
+                    itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
+                    alert(data.message);
                     break;
                 case 422:
                     const userAddress = $('#user_address');

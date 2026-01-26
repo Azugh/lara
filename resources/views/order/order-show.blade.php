@@ -42,13 +42,14 @@
                             <tr>
                                 <td>
                                     @if($orderItem->item_image)
-                                        <img src="{{ $orderItem->item_image }}" alt="{{ $orderItem->item_name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                        <img src="{{ $orderItem->item_image }}" alt="{{ $orderItem->item_name }}"
+                                             style="width: 50px; height: 50px; object-fit: cover;">
                                     @endif
                                     {{ $orderItem->item_name }}
                                 </td>
                                 <td>{{ $orderItem->quantity }}</td>
                                 <td>{{ $orderItem->price }} ₽</td>
-                                <td>{{ $orderItem->price * $orderItem->quantity }} ₽</td>
+                                <td>{{ $orderItem->getTotalPrice() }} ₽</td>
                             </tr>
                         @endforeach
                         </tbody>

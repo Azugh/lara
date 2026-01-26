@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddItemToCartRequest;
 use App\Http\Requests\CartItemUpdateRequest;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Item;
 use Illuminate\Http\JsonResponse;
@@ -18,11 +20,9 @@ class CartItemController extends Controller
     /*
      * добавить товар в корзину
      */
-    public function addItemToCart(Request $request, Item $item)
+    public function addItemToCart(AddItemToCartRequest $request, Item $item)
     {
-
-        $user = Auth::user();
-        $cart = $user->getCart();
+        $cart = Cart::where('user_id', Auth::id())->first();
         $cartItem = $cart->cartItems()->where('item_id', $item['id'])->first();
 
         // Есть ли товар в магазине
@@ -39,7 +39,7 @@ class CartItemController extends Controller
 //                'name' => $item['name'],
                 'item_id' => $item['id'],
                 'cart_id' => $cart->id,
-                'quantity' => 1,
+                'quantity' => $request['quantity'],
 //                'price' => $item['price'],
             ]);
         }

@@ -6,10 +6,11 @@
         <div class="container">
             {{--            <h1>итемы</h1>--}}
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="image-thing">
-                        <img src="{{ $item->image }}" alt="{{ $item->name }}" class="img-fluid">
+            <div class="flex-row">
+                <div class="w-auto flex-grow-1 col-md-6">
+                    <div class="w-auto flex-grow-1">
+                        <img src="{{ $item->image }}" alt="{{ $item->name }}"
+                             class="img-fluid w-100 h-100 object-fit-cover" style="height: 350px; width: 350px">
                     </div>
                 </div>
 
@@ -36,57 +37,28 @@
                               enctype="multipart/form-data">
                             @csrf
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <input type="number" id="quantity" value="1" name="quantity" min="0"
+                                               max="{{ $item->quantity }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary"
+                                                @empty($item->quantity) disabled @endempty>Добавить в корзину</button>
+                                    </div>
+                                </div>
                             </div>
                             @if(Session::has('success'))
                                 <div class="alert alert-success alert-dismissable">{{ Session::get('success') }}</div>
                             @elseif(Session::has('error'))
                                 <div class="alert alert-danger">{{ Session::get('OutOfStock') }}</div>
 
-                        @endif
+                            @endif
                         </form>
                     </div>
                 </div>
 
             </div>
-
-            {{--            <form action="{{ route('cart-item.add', $item) }}" method="POST"--}}
-            {{--                  enctype="multipart/form-data">--}}
-            {{--                @csrf--}}
-            {{--                <div class="d-grid gap-2">--}}
-            {{--                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>--}}
-            {{--                </div>--}}
-            {{--                @if(Session::has('success'))--}}
-            {{--                    <div class="alert alert-success alert-dismissable">{{ Session::get('success') }}</div>--}}
-            {{--                @elseif(Session::has('error'))--}}
-            {{--                    <div class="alert alert-danger">{{ Session::get('OutOfStock') }}</div>--}}
-
-            {{--                @endif--}}
-
-
-            {{--            </form>--}}
-            {{--            <table class="table">--}}
-            {{--                <thead>--}}
-            {{--                <tr>--}}
-            {{--                    <th>ID</th>--}}
-            {{--                    <th>Имя</th>--}}
-            {{--                    <th>Категории</th>--}}
-            {{--                    <th>Действия</th>--}}
-            {{--                </tr>--}}
-            {{--                </thead>--}}
-            {{--                <tbody>--}}
-            {{--                    <tr>--}}
-            {{--                        <td>{{ $item->id }}</td>--}}
-            {{--                        <td>{{ $item->name }}</td>--}}
-            {{--                        <td>{{ $item->description }}</td>--}}
-            {{--                        <td>{{ $item->price }}</td>--}}
-            {{--                        <td>{{ $item->quantity }}</td>--}}
-
-
-            {{--                    </tr>--}}
-            {{--                </tbody>--}}
-            {{--            </table>--}}
-
         </div>
     </div>
 @endsection

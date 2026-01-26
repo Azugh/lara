@@ -49,11 +49,11 @@
                                 </button>
                             </td>
                         </tr>
-                        <br>
-                        <div id="cart-item-error"></div>
                     @endforeach
                     </tbody>
                 </table>
+                <div id="cart-item-error"></div>
+
             </div>
             <div id="total-{{ $cartItem->id}}" style="width: 25%; float: right; display: inline-block;
                      border-radius: 10px; border: 1px solid darkgrey;
@@ -66,6 +66,7 @@
                         <h4>Ваш Адрес</h4>
                         <input id="user_address" type="text" placeholder="Ваш адрес" name="address"
                                value="{{old('address')}}" style="width: 200px"> <br>
+                        {{--error - success message--}}
                         <span id="address-error" class="text-danger"></span>
                     </label>
                 </div>

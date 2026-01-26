@@ -9,7 +9,8 @@ class Cart extends Model
 {
     //
     protected $fillable = ['user_id', 'total_price', 'total_quantity',
-        'session_id'
+        'session_id',
+        'quantity'
     ];
 
     protected $casts = ['total_price' => 'decimal:2'];

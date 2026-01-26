@@ -29,16 +29,8 @@ class ItemController extends Controller
         return view("item.show-item", ['item' => $item]);
     }
     public function store(ItemRequest $request) {
-        // dd($request);
-        // $item = new Item();
-        // $item->category = $request->category;
-        // dd($item);
-        // dd($request->all());
-        // if ($request->has('category')) {
-        //     dd($request->all());
-        // }
-        // dd($request->all());
-        $request = $request->all();
+
+//        $request = $request->all();
         if ($request['image']) {
             $imagePath = $request['image']->store('images/item-images', 'public');
             $request['image'] = $imagePath;

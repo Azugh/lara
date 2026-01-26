@@ -26,9 +26,10 @@
         </div>
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories ps ps--active-y" id="accordionExample">
-            <li class="menu active">
+            <li class="menu {{ (Request::is('admin/*') ? 'active' : '') }}">
                 {{--aria-expanded положение стрелки--}}
-                <a href="#dashboard" data-bs-toggle="collapse" class="dropdown-toggle">
+                <a href="#dashboard" data-bs-toggle="collapse"
+                   class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -49,26 +50,26 @@
                 {{--show открыи/закрыт список--}}
                 <ul id="dashboard" class="collapse submenu list-unstyled" data-bs-parent="#accordionExample">
                     @if(Auth::user()?->isAdmin())
-                        <li class="active">
+                        <li class="{{ (Request::routeIs('admin.slider.index') ? 'active' : '') }}">
                             <a href="{{ route('admin.slider.index') }}">
                                 <span>Слайдеры</span></a>
                         </li>
-                        <li class="">
+                        <li class="{{ (Request::routeIs('admin.register_request.index') ? 'active' : '') }}">
                             <a href="{{ route('admin.register_request.index') }}"> Запросы на регистрацию </a>
                         </li>
-                        <li class="">
+                        <li class="{{ (Request::routeIs('admin.user.index') ? 'active' : '') }}">
                             <a href="{{ route('admin.user.index') }}">
                                 <span>Пользователи</span>
                             </a>
                         </li>
-                        <li class="">
+                        <li class="{{ (Request::routeIs('admin.cart.index') ? 'active' : '') }}">
                             <a href="{{ route('admin.cart.index') }}">
                                 <span>Корзины пользователей</span>
                             </a>
                         </li>
                     @endif
                     @if(Auth::user()?->isManager())
-                        <li class="">
+                        <li class="{{ (Request::routeIs('order.index') ? 'active' : '') }}">
                             <a href="{{ route('order.index') }}">
                                 <span>Заказы пользователей</span></a>
                         </li>

@@ -4,7 +4,7 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-{{--TODO Доделать саорачивание сайдбара возможно js ajax--}}
+    {{--TODO Доделать саорачивание сайдбара возможно js ajax--}}
     <div id="filters-container" class="cbp-filter-container text-center">
         @if(isset($categories) && count($categories) > 0)
             <div class="cbp-panel">
@@ -28,6 +28,7 @@
                                     </div>
                                 </a>
                             </div>
+
                         @endforeach
                     @endif
                 @endforeach

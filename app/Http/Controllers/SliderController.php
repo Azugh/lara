@@ -35,25 +35,15 @@ class SliderController extends Controller
     public function store(SliderRequest $request)
     {
 
-        // $validated = $request->validated();
-//        $isActive = (bool)$request['isActive'];
-        $request = $request->all();
+//        $request = $request->all();
         if ($request['image']) {
             $imagePath = $request['image']->store('images/slider-images', 'public');
             $request['image'] = $imagePath;
         }
 
-//        $request['isActive'] = $isActive;
-        // dd($request);
-
-        // dd($validated);
-        // $data['isActive'] = $request->has('isActive') && $request->;
-        // Log::error("message", ["ldo"=> $validated]);
-        // $isActive = $request['isActive'];
-        // dd($isActive);
         Slider::create($request);
 
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно создан!');
     }
 
@@ -84,7 +74,7 @@ class SliderController extends Controller
 
         $slider->update($validated);
 
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно изменен!');
     }
 
@@ -98,7 +88,7 @@ class SliderController extends Controller
 
         $slider->delete();
 
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно удален!');
     }
 

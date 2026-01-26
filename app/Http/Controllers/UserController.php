@@ -16,15 +16,15 @@ class UserController extends Controller
     }
 
     // подтвердить email
-    public function verifyEmail($id)
-    {
-        $user = User::findOrFail($id);
-        if (!$user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
-            return redirect()->route('user.index')->with('success', 'Email подтвержден.');
-        }
-        return redirect()->route('user.index')->with('error', 'ошибка');
-    }
+//    public function verifyEmail($id)
+//    {
+//        $user = User::findOrFail($id);
+//        if (!$user->hasVerifiedEmail()) {
+//            $user->markEmailAsVerified();
+//            return redirect()->route('admin.user.index')->with('success', 'Email подтвержден.');
+//        }
+//        return redirect()->route('admin.user.index')->with('error', 'ошибка');
+//    }
 
     public function update($id) {
         $user = User::findOrFail($id);
@@ -32,9 +32,11 @@ class UserController extends Controller
         $user->email_verified_at = now();
     }
 
-    public function makeManager(string $id)
+    /*
+     * Админ создает менеджеров
+     */
+    public function promoteToManager(string $id)
     {
-
         $user = User::findOrFail($id);
         $user->roles()->attach(Role::where('name', 'manager')->first());
 

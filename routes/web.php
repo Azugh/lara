@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('order')->group(function () {
         Route::get('/create', [OrderController::class, 'create'])->name('order.create');
         Route::post('/store', [OrderController::class, 'store'])->name('order.store');
+        Route::get('/payment/{id}', [OrderController::class, 'payment'])->name('order.payment');
         Route::get('/payment/{id}/confirm', [OrderController::class, 'paymentConfirm'])->name('order.payment.confirm');
     });
 });
@@ -76,7 +77,6 @@ Route::group(['middleware' => ['manager']], function () {
         Route::get('/', [OrderController::class, 'index'])->name('order.index');
         Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('order.edit');
         Route::put('/{id}/update-shipping-status', [OrderController::class, 'updateShippingStatus'])->name('order.update-shipping-status');
-
     });
 });
 
@@ -95,7 +95,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
-        Route::put('/{id}', [UserController::class, 'makeManager'])->name('user.make-manager');
+        Route::put('/{id}', [UserController::class, 'promoteToManager'])->name('user.make-manager');
     });
 
     Route::resource('slider', SliderController::class)

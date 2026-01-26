@@ -45,7 +45,7 @@ class OrderPayment extends Mailable
      */
     public function content(): Content
     {
-        $url = URL::signedRoute('order.payment.confirm', ['id' => $this->order->id]);
+        $url = URL::signedRoute('order.payment', ['id' => $this->order->id]);
         return new Content(
             markdown: 'mail.orders.payment',
             with: [

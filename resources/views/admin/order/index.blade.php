@@ -32,25 +32,25 @@
                                                             <thead>
                                                             <tr>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">ID
+                                                                    style="width: 300px">ID
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Пользователь
+                                                                    style="width: 300px">Пользователь
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Общая цена
+                                                                    style="width: 300px">Общая цена
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Всего товара
+                                                                    style="width: 300px">Всего товара
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Адрес
+                                                                    style="width: 300px">Адрес
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 100.100px">Статус доставки
+                                                                    style="width: 100px">Статус доставки
                                                                 </th>
                                                                 <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                                    style="width: 300.300px">Статус оплаты
+                                                                    style="width: 300px">Статус оплаты
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -66,7 +66,7 @@
                                                                     <td>{{ $order['payment_status'] }} </td>
                                                                     <td>
                                                                         <form
-                                                                            action="{{ route('admin.order.update', $order->id) }}"
+                                                                            action="{{ route('order.edit', $order->id) }}"
                                                                             method="POST" class="d-inline">
                                                                             @csrf
                                                                             @method('PUT')

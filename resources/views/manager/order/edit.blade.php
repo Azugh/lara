@@ -117,22 +117,22 @@
                                                 <thead>
                                                 <tr>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">ID товара
+                                                        style="width: 300px">ID товара
                                                     </th>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">Изображение
+                                                        style="width: 300px">Изображение
                                                     </th>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">Название товара
+                                                        style="width: 300px">Название товара
                                                     </th>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">Количество товара
+                                                        style="width: 300px">Количество товара
                                                     </th>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">Цена за штуку
+                                                        style="width: 300px">Цена за штуку
                                                     </th>
                                                     <th aria-controls="zero-config" rowspan="1" colspan="1"
-                                                        style="width: 300.300px">Всего за позицию
+                                                        style="width: 300px">Всего за позицию
                                                     </th>
                                                 </tr>
                                                 </thead>

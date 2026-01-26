@@ -168,6 +168,7 @@ class OrderController extends Controller
     /*
      * TODO make view like cart view with only info about order
      * Пользователь в письме подтверждает оплату
+     * order.id
      */
     public function paymentConfirm(string $id)
     {
@@ -190,6 +191,11 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
 
         return view('manager.order.edit', compact('order'));
+    }
+
+    public function payment(string $id)
+    {
+        return route('order.payment.confirm', ['id' => $id]);
     }
 
 }
