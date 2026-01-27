@@ -41,12 +41,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('cartItem')->prefix('cart-item')->group(function () {
         Route::post('/{item}', [CartItemController::class, 'addItemToCart'])->name('cart-item.add');
-        Route::post('{id}/update-quantity', [CartItemController::class, 'updateItemCartQuantity'])->name('cart-item.update-quantity');
+        Route::put('{id}/update-quantity', [CartItemController::class, 'updateItemCartQuantity'])->name('cart-item.update-quantity');
         Route::delete('cart-item/{id}', [CartItemController::class, 'removeItemFromCart'])->name('cart-item.remove');
     });
 
     Route::prefix('cart')->group(function () {
-        Route::delete('cart/{id}', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
+        Route::delete('/', [CartController::class, 'removeAllItemsFromCart'])->name('cart.delete');
         Route::get('/', [CartController::class, 'show'])->name('cart.show');
         Route::get('{id}/partial', [CartController::class, 'partial'])->name('cart.partial');
     });
@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', [OrderController::class, 'create'])->name('order.create');
         Route::post('/store', [OrderController::class, 'store'])->name('order.store');
         Route::get('/payment/{id}', [OrderController::class, 'payment'])->name('order.payment');
-        Route::get('/payment/{id}/confirm', [OrderController::class, 'paymentConfirm'])->name('order.payment.confirm');
+        Route::post('/payment/{id}/confirm', [OrderController::class, 'paymentConfirm'])->name('order.payment.confirm');
     });
 });
 

@@ -28,7 +28,7 @@ class OrderRequest extends FormRequest
     {
         return [
             //
-//            'cartID' => 'required|exists:carts,id',
+            'id' => 'required|exists:carts',
             'userAddress' => 'required|string|max:255',
         ];
     }
@@ -38,7 +38,8 @@ class OrderRequest extends FormRequest
     {
         return [
             'userAddress.required' => 'Адрес обязателен для заполнения',
-            'userAddress.max' => 'Поле не может содержать больше 255 символов'
+            'userAddress.max' => 'Поле не может содержать больше 255 символов',
+            'id.exists' => 'dasdas'
         ];
     }
     public function failedValidation(Validator $validator)

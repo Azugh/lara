@@ -28,7 +28,9 @@
         //     }
         // });
 
-        async function updateCart() {
+        let userAddressText = '';
+
+        async function updateCart(userAddressText) {
             const response = await fetch('{{ route("cart.partial", $cart->id ) }}');
             document.getElementById('cart-container').innerHTML = await response.text();
         }
@@ -39,133 +41,114 @@
             switch (status) {
                 case 405:
                     itemCartError.addClass('alert alert-danger');
-                    // itemCartError.text(data.message);
-                    itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
+                    itemCartError.text(data.message);
+                    // itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
                     // alert(data.message);
                     break;
                 case 200:
                     itemCartError.addClass('alert alert-success');
-                    itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
+                    itemCartError.text(data.message);
+                    // itemCartError.innerHTML = '<button type="button" class="close" data-dismiss="alert">x</button>'
                     alert(data.message);
                     break;
                 case 422:
                     const userAddress = $('#user_address');
                     const addressError = $('#address-error');
+                    userAddress.text(userAddressText);
                     userAddress.css('border-color', 'red');
-                    addressError.text('Введите адрес');
+                    addressError.text(data.errors);
                     break;
             }
         }
 
+        // TODO найти ajax с формами в blade
+        // TODO найти замену data(cart-id)
         $(document).ready(function () {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             updateCart()
 
             $(document).on('click', '#btn-checkout', async function () {
-                const cartId = $(this).data('cart-id');
-                const userAddress = $('#user_address');
-                const addressError = $('address-error');
+                const form = document.getElementById('order-checkout-form');
+                const formData = new FormData(form);
 
-                userAddress.css('border-color', '');
-                addressError.text('');
-                const response = await fetch('{{ route("order.store") }}', {
+                const response = await fetch(form.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userAddress: userAddress.val().trim()
-                    }),
-                });
-                if (response.ok) {
-                    console.log('корзина обновлена')
-                    await updateCart();
-                }
-                else {
-                    const data = await response.json();
-                    errorHandler(data, response.status);
                     }
+                });
+
+                if (response.ok) {
+                    await updateCart();
+                } else {
+                    const data = await response.json()
+                    errorHandler(data, response.status);
+                }
             });
 
             $(document).on('click', '#btn-delete-all', async function () {
-                const cartId = $(this).data('cart-id');
-                const response = await fetch('{{ route("cart.delete", ":id") }}'.replace(':id', cartId), {
+                const form = document.getElementById('delete-cart-form');
+                const formData = new FormData(form);
+
+                if (!confirm('Очистить корзину')) {
+                    return
+                }
+
+                const response = await fetch(form.action, {
                     method: 'DELETE',
+                    body: formData,
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
-                    },
+                        'Accept': 'application/json'
+                    }
                 });
+
                 if (response.ok) {
-                    console.log('корзина очишена');
+                    console.log('Корзина очищена');
                     await updateCart();
                 }
             });
 
             $(document).on('click', '.btn-remove', async function () {
-                const cartItemId = $(this).data('cart-item-id');
-                const response = await fetch('{{ route("cart-item.remove", ":id") }}'.replace(':id', cartItemId), {
+                const form = document.getElementById('delete-cart-item-form');
+                const formData = new FormData(form);
+
+                const response = await fetch(form.action, {
                     method: 'DELETE',
+                    body: formData,
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
-                    },
+                        'Accept': 'application/json'
+                    }
                 });
-                if (response.ok) {
-                    console.log('Товар удален из корзины');
-                    await updateCart();
-                }
+
             });
 
             $(document).on('click', '.btn-increase', async function () {
-                const cartItemId = $(this).data('cart-item-id');
-                const response = await fetch('{{ route("cart-item.update-quantity", ":id") }}'.replace(':id', cartItemId), {
+                const form = document.getElementById('update-form');
+                const formData = new FormData(form);
+
+                const response = await fetch(form.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        sign: 'increase',
-                    }),
+                    }
                 });
+
                 if (response.ok) {
-                    const data = await response.json();
-                    await updateCart()
-                    // alert(data.message);
-                    console.log(data);
+                    await updateCart();
                 }
                 else {
                     const data = await response.json();
-                    // alert(response.status);
                     errorHandler(data, response.status);
                 }
+            });
 
-            })
-
-
-            $(document).on('click', '.btn-decrease', async function () {
-                const cartItemId = $(this).data('cart-item-id');
-                const response = await fetch('{{ route("cart-item.update-quantity", ":id") }}'.replace(':id', cartItemId), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        sign: 'decrease',
-                    }),
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    await updateCart()
-                    // alert(data.message);
-                    console.log(data.message);
-                }
-            })
         })
     </script>
 

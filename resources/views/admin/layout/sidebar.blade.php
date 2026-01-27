@@ -29,7 +29,7 @@
             <li class="menu {{ (Request::is('admin/*') ? 'active' : '') }}">
                 {{--aria-expanded положение стрелки--}}
                 <a href="#dashboard" data-bs-toggle="collapse"
-                   class="dropdown-toggle">
+                   class="dropdown-toggle" aria-expanded="{{ (Request::is('admin/*') ? 'true' : 'false') }}">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -48,7 +48,7 @@
                     </div>
                 </a>
                 {{--show открыи/закрыт список--}}
-                <ul id="dashboard" class="collapse submenu list-unstyled" data-bs-parent="#accordionExample">
+                <ul id="dashboard" class="collapse submenu list-unstyled {{ (Request::is('admin/*') ? 'show' : '') }}" data-bs-parent="#accordionExample">
                     @if(Auth::user()?->isAdmin())
                         <li class="{{ (Request::routeIs('admin.slider.index') ? 'active' : '') }}">
                             <a href="{{ route('admin.slider.index') }}">

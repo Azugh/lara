@@ -50,7 +50,8 @@ class OrderPayment extends Mailable
             markdown: 'mail.orders.payment',
             with: [
                 'order' => $this->order,
-                'url' => $url,
+                'url' => url(route('order.payment',
+                    ['id' => $this->order->id])),
             ]
         );
     }

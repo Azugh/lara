@@ -27,19 +27,22 @@ class CartController extends Controller
         $cart = Cart::with('cartItems.item')->where('user_id', Auth::id())->first();
         if (!$cart) {
             $cart = Cart::create(['user_id' => Auth::id()]);
-            $cart->load('cartItems.item');
         }
+        $cart->load(['cartItems.item' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
         return view('cart.cart-show', compact(['cart']));
     }
 
     public function partial($id)
     {
         try {
-            return view('cart.partial.partial-cart-show', ["cart" => Cart::findOrFail($id)])->render();
+            $cart = Cart::findOrFail($id);
+            return view('cart.partial.partial-cart-show', ["cart" => $cart])->render();
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
+            return response(404);
         }
-
     }
 
     public function create()
@@ -50,32 +53,27 @@ class CartController extends Controller
     /*
      * очищение корзины
      */
-    public function removeAllItemsFromCart(int $id)
+    public function removeAllItemsFromCart(Request $request)
     {
+        Log::alert('request ', $request->all());
 
-        try {
-            $cart = Cart::with('cartItems')->findOrFail($id);
-            $cart->cartItems()->delete();
+        $cart = Cart::with('cartItems')->findOrFail($request['id']);
+        $cart->cartItems()->delete();
 //            $cart = Cart::findOrFail($id);
 //            foreach ($cart->cartItems as $cartItem) {
 //                $cartItem->delete();
 //            }
 
-            $cart->total_price = 0;
-            $cart->total_quantity = 0;
-            $cart->save();
+        $cart->total_price = 0;
+        $cart->total_quantity = 0;
+        $cart->save();
 
 
-            return response()->json([
-                'success' => true,
-                'cart_total_price' => 0,
-                'cart_total_quantity' => 0,
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-            ]);
-        }
+        return response()->json([
+            'success' => true,
+            'cart_total_price' => 0,
+            'cart_total_quantity' => 0,
+        ]);
+
     }
-
 }

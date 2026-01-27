@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <input type="number" id="quantity" value="1" name="quantity" min="0"
-                                               max="{{ $item->quantity }}">
+                                               max="{{ $item->quantity  }}">
                                     </div>
                                     <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary"
@@ -50,7 +50,7 @@
                             </div>
                             @if(Session::has('success'))
                                 <div class="alert alert-success alert-dismissable">{{ Session::get('success') }}</div>
-                            @elseif(Session::has('error'))
+                            @elseif(Session::has('OutOfStock'))
                                 <div class="alert alert-danger">{{ Session::get('OutOfStock') }}</div>
 
                             @endif

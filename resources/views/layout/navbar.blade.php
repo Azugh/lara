@@ -37,8 +37,8 @@
                     <li><a href="{{ route('login') }}">Войти</a></li>
                 @endguest
                 @auth
-                    <li><a href="{{ route('dashboard') }}">Профиль</a></li>
-                    <li><a href="{{ route('cart.show') }}">Корзина</a><span class="vertical-line-pill">{{ Auth::user()->getCart()->total_quantity }}</span></li>
+                    <li><a href="{{ route('dashboard') }}">{{ Auth::user()->name }}</a></li>
+                    <li><a href="{{ route('cart.show') }}">Корзина</a><span class="vertical-line-pill"></span></li>
 
 
                     <li><a href="{{ route('logout') }}"
@@ -49,7 +49,8 @@
                         </form>
                     </li>
                     <li>
-                        {{Request::getUser()->name}}
+{{--                        {{Request::getUser()->name}}--}}
+                        {{ Auth::user()->name }}
                     </li>
                 @endauth
             </ul>
