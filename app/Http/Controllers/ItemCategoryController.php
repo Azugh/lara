@@ -21,6 +21,5 @@ class ItemCategoryController extends Controller
         ItemCategory::create($request);
                 return redirect()->route('home.index')
             ->with('success', 'Айтем успешно изменен!');
-
     }
 }

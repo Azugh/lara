@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -95,7 +95,7 @@
 
 </head>
 
-<body class="layout-boxed" data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100">
+<body class="layout-boxed layout-boxed">
 
     <!-- BEGIN LOADER -->
     @yield('loader')

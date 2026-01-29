@@ -48,7 +48,7 @@ class SliderRequest extends FormRequest
             'image.mimes' => 'Допустимые форматы: PNG, JPG, JPEG',
             'image.max' => 'Максимальный размер файла: 2MB',
             'image.dimensions' => 'Размер изображения должен быть от 100x100 до 1000x1000 пикселей',
-            'isActive.boolean'=> 'True или False',
+            'isActive.boolean'=> 'English or Spanish?',
         ];
     }
 }

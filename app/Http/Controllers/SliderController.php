@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SliderRequest;
+use App\Models\Slider;
 use App\Models\Sliders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,52 +16,42 @@ class SliderController extends Controller
     public function index()
     {
         $content = DB::table('sliders')->latest('created_at')->get();
-        return view('/admin/admin', ['sliders' => $content]);
+        return view('admin.layout.sliders', ['sliders' => $content]);
     }
 
     public function show($id)
     {
         // dd($slider);
-        $slider = Sliders::find($id);
+        $slider = Slider::find($id);
 
-        return view('admin/slider/slider-show', compact('slider'));
+        return view('admin.slider.slider-show', compact('slider'));
     }
 
     public function create()
     {
-        return view('admin/slider/slider-create');
+        return view('admin.slider.slider-create');
     }
 
     public function store(SliderRequest $request)
     {
 
-        // $validated = $request->validated();
-        $isActive = $request['isActive'] ? true : false;
-        $request = $request->all();
+//        $request = $request->all();
         if ($request['image']) {
             $imagePath = $request['image']->store('images/slider-images', 'public');
             $request['image'] = $imagePath;
         }
 
-        $request['isActive'] = $isActive;
-        // dd($request);
+        Slider::create($request);
 
-        // dd($validated);
-        // $data['isActive'] = $request->has('isActive') && $request->;
-        // Log::error("message", ["ldo"=> $validated]);
-        // $isActive = $request['isActive'];
-        // dd($isActive);
-        Sliders::create($request);
-
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно создан!');
     }
 
     public function edit($id)
     {
-        $slider = Sliders::find($id);
+        $slider = Slider::find($id);
 
-        return view('admin/slider/slider-edit', compact('slider'));
+        return view('admin.slider.slider-edit', compact('slider'));
     }
 
     public function update(SliderRequest $request, $id)
@@ -68,7 +59,7 @@ class SliderController extends Controller
         // dd($request);
 
         //находим запись в бд
-        $slider = Sliders::findOrFail($id);
+        $slider = Slider::findOrFail($id);
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -83,13 +74,13 @@ class SliderController extends Controller
 
         $slider->update($validated);
 
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно изменен!');
     }
 
     public function destroy($id)
     {
-        $slider = Sliders::findOrFail($id);
+        $slider = Slider::findOrFail($id);
 
         if ($slider->image) {
             Storage::disk('public')->delete($slider->image);
@@ -97,7 +88,7 @@ class SliderController extends Controller
 
         $slider->delete();
 
-        return redirect()->route('slider.index')
+        return redirect()->route('admin.slider.index')
             ->with('success', 'Слайдер успешно удален!');
     }
 

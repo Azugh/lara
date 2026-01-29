@@ -2,25 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Item extends Model
 {
 
-    public $fillable = ['name', 'image'];
+    use HasFactory;
 
-    public function categories() {
+    public $fillable = ['name', 'image', 'quantity', 'price', 'category'];
+
+    public $casts = ['price' => 'decimal:2'];
+    public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(ItemCategory::class, 'item_item_category');
     }
     //
 
     public function getImageUrlAttribute()
     {
-        if (!$this->image) {
+        if (!$this['image']) {
             return null;
         }
 
-        return Storage::url($this->image);
+        return Storage::url($this['image']);
     }
 }

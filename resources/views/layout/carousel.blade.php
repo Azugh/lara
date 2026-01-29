@@ -1,3 +1,4 @@
+@if(isset($sliders) && $sliders->isNotEmpty())
 <div id="preloader">
     <div id="status">
         <div class="spinner"></div>
@@ -6,9 +7,10 @@
 <div class="tp-fullscreen-container revolution">
     <div class="tp-fullscreen">
         <ul>
+
             @foreach ($sliders as $slider)
 
-                <li data-transition="fade"> <img src="{{ asset(Storage::url($slider->image)) }}" alt=""
+                <li data-transition="fade"> <img src="{{ asset($slider->image) }}" alt=""
                         data-bgposition="center top" data-bgfit="cover" data-bgrepeat="no-repeat" />
                     <div class="tp-caption large sfb text-center" data-x="center" data-y="263" data-speed="900"
                         data-start="800" data-easing="Sine.easeOut">{{ $slider->title }}</div>
@@ -19,9 +21,11 @@
                             class="btn btn-large btn-border">{{ $slider->btn_text }}</a></div>
                 </li>
             @endforeach
+
         </ul>
         <div class="tp-bannertimer tp-bottom"></div>
     </div>
     <!-- /.tp-fullscreen-container -->
 </div>
 <!-- /.revolution -->
+@endif
